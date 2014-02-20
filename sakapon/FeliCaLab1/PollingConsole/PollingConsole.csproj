@@ -44,6 +44,7 @@
     <Compile Include="..\..\lib\FelicaLib.cs">
       <Link>FelicaLib.cs</Link>
     </Compile>
+    <Compile Include="FeliCaPolling.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
