@@ -53,8 +53,14 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="FelicaTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FelicaLib_DotNet\FelicaLib_DotNet.csproj">
+      <Project>{ce529c49-470f-4d1c-b4e5-4b9e854d8597}</Project>
+      <Name>FelicaLib_DotNet</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
