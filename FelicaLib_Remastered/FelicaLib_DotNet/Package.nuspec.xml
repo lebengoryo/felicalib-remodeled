@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>https://github.com/sakapon/felicalib-remastered/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/sakapon/felicalib-remastered</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <releaseNotes>Make the library available on NuGet.</releaseNotes>
+    <copyright>$copyright$</copyright>
+    <tags>FeliCa PaSoRi</tags>
+  </metadata>
+  <files>
+    <file src="bin\Release\$id$.dll" target="lib\net35" />
+    <file src="bin\Release\$id$.xml" target="lib\net35" />
+    <file src="bin\Release\felicalib.dll" target="content" />
+  </files>
+</package>
