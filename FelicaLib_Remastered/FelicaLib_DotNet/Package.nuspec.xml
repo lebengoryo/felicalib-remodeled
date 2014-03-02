@@ -6,15 +6,15 @@
     <title>$title$</title>
     <authors>$author$</authors>
     <owners>$author$</owners>
-    <licenseUrl>$licenseUrl$</licenseUrl>
-    <projectUrl>$projectUrl$</projectUrl>
+    <licenseUrl>https://github.com/sakapon/felicalib-remastered/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/sakapon/felicalib-remastered</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>$releaseNotes$</releaseNotes>
+    <releaseNotes>Remastered felicalib.</releaseNotes>
     <copyright>$copyright$</copyright>
-    <tags>$tags$</tags>
+    <tags>FeliCa</tags>
   </metadata>
   <files>
-    <file src="bin\Release\*.*" target="lib\net45" />
+    <file src="bin\Release\*.*" target="lib\net35" />
   </files>
 </package>
