@@ -6,7 +6,8 @@ using System.Runtime.InteropServices;
 // アセンブリに関連付けられている情報を変更するには、
 // これらの属性値を変更してください。
 [assembly: AssemblyTitle("felicalib Remastered")]
-[assembly: AssemblyDescription("FeliCa access wrapper library.")]
+[assembly: AssemblyDescription(@"FeliCa access wrapper library.
+プロジェクトに追加された felicalib.dll のプロパティを開き、[出力ディレクトリにコピー] を [新しい場合はコピーする] に設定してください。")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Keiho Sakapon")]
 [assembly: AssemblyProduct("felicalib")]
