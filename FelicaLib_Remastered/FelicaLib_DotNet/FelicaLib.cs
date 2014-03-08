@@ -115,7 +115,9 @@ namespace FelicaLib
         /// <param name="disposing">すべてのリソースを解放する場合は <see langword="true"/>。アンマネージ リソースのみを解放する場合は <see langword="false"/>。</param>
         protected virtual void Dispose(bool disposing)
         {
-            if (_pModule != IntPtr.Zero)
+            // MEMO: Felica オブジェクトよりも先に DLL が解放されるのを防ぐため、Dispose メソッドが呼び出されたときのみ解放します。
+            // MEMO: したがって、このオブジェクトは Felica クラスにおいて、アンマネージ リソースとして管理されます。
+            if (disposing && _pModule != IntPtr.Zero)
             {
                 BindDLL.FreeLibrary(_pModule);
                 _pModule = IntPtr.Zero;
@@ -248,11 +250,17 @@ namespace FelicaLib
         {
             if (pasorip != IntPtr.Zero)
             {
-                pasori_close(pasorip);
-                pasorip = IntPtr.Zero;
+                try
+                {
+                    pasori_close(pasorip);
+                    pasorip = IntPtr.Zero;
+                }
+                catch (AccessViolationException)
+                {
+                }
             }
 
-            if (disposing && bdDLL != null)
+            if (bdDLL != null)
             {
                 bdDLL.Dispose();
                 bdDLL = null;
