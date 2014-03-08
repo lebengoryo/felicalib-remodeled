@@ -3,6 +3,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace UnitTest45
 {
@@ -21,6 +23,28 @@ namespace UnitTest45
         {
             var target = ReadData();
             Assert.AreEqual(Expected, target);
+        }
+
+        [TestMethod]
+        public void ReadWithoutEncryption_ManyTimes()
+        {
+            Task.Run(() =>
+            {
+                for (int i = 0; i < 100; i++)
+                {
+                    try
+                    {
+                        Console.WriteLine("Start");
+                        Console.WriteLine(ReadData());
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                }
+            });
+
+            Thread.Sleep(10000);
         }
 
         static object ReadData()
