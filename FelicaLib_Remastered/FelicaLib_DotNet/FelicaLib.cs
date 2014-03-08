@@ -92,11 +92,23 @@ namespace FelicaLib
 
         #region IDisposable メンバ
 
+        ~BindDLL()
+        {
+            Dispose(false);
+        }
+
         public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
         {
             if (_pModule != IntPtr.Zero)
             {
                 BindDLL.FreeLibrary(_pModule);
+                _pModule = IntPtr.Zero;
             }
         }
 
@@ -191,30 +203,38 @@ namespace FelicaLib
         #region IDisposable メンバ
 
         /// <summary>
+        /// デストラクタ
+        /// </summary>
+        ~Felica()
+        {
+            Dispose(false);
+        }
+
+        /// <summary>
         /// オブジェクト破棄時処理
         /// </summary>
         public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
         {
             if (pasorip != IntPtr.Zero)
             {
                 pasori_close(pasorip);
                 pasorip = IntPtr.Zero;
             }
-            if (bdDLL != null)
+
+            if (disposing && bdDLL != null)
             {
+                bdDLL.Dispose();
                 bdDLL = null;
             }
         }
 
         #endregion
-
-        /// <summary>
-        /// デストラクタ
-        /// </summary>
-        ~Felica()
-        {
-            Dispose();
-        }
 
         /// <summary>
         /// ポーリング
