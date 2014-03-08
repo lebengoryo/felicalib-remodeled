@@ -125,16 +125,24 @@ namespace FelicaLib
         #endregion
     }
 
-    // システムコード
-    enum SystemCode : int
+    /// <summary>
+    /// FeliCa のシステム コードを表します。
+    /// </summary>
+    public enum FelicaSystemCode
     {
-        Any = 0xffff,           // ANY
-        Common = 0xfe00,        // 共通領域
-        Cyberne = 0x0003,       // サイバネ領域
+        /// <summary>すべて。</summary>
+        Any = 0xFFFF,
+        /// <summary>共通領域。</summary>
+        Common = 0xFE00,
+        /// <summary>サイバネ領域。</summary>
+        Cybernetics = 0x0003,
 
-        Edy = 0xfe00,           // Edy (=共通領域)
-        Suica = 0x0003,         // Suica (=サイバネ領域)
-        QUICPay = 0x04c1,       // QUICPay
+        /// <summary>Edy。共通領域を使用します。</summary>
+        Edy = Common,
+        /// <summary>Suica。サイバネ領域を使用します。</summary>
+        Suica = Cybernetics,
+        /// <summary>QUICPay。</summary>
+        QuicPay = 0x04C1,
     }
 
     /// <summary>
@@ -252,6 +260,15 @@ namespace FelicaLib
         }
 
         #endregion
+
+        /// <summary>
+        /// ポーリング
+        /// </summary>
+        /// <param name="systemcode">システムコード</param>
+        public void Polling(FelicaSystemCode systemcode)
+        {
+            Polling((int)systemcode);
+        }
 
         /// <summary>
         /// ポーリング
