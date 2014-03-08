@@ -31,15 +31,15 @@
  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-///
-/// Porting to x64 systems by DeForest(Hirokazu Hayashi)
-///
+//
+// Porting to x64 systems by DeForest(Hirokazu Hayashi)
+//
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Runtime.InteropServices;
 using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Text;
 
 namespace FelicaLib
 {
@@ -49,11 +49,11 @@ namespace FelicaLib
     public class BindDLL : IDisposable
     {
         [DllImport("kernel32", CharSet = CharSet.Unicode, SetLastError = true)]
-        private static extern IntPtr LoadLibrary([MarshalAs(UnmanagedType.LPWStr)] string lpFileName);
+        private static extern IntPtr LoadLibrary([MarshalAs(UnmanagedType.LPWStr)]string lpFileName);
         [DllImport("kernel32", SetLastError = true)]
         private static extern bool FreeLibrary(IntPtr hModule);
         [DllImport("kernel32", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = false)]
-        private static extern IntPtr GetProcAddress(IntPtr hModule, [MarshalAs(UnmanagedType.LPStr)]  string lpProcName);
+        private static extern IntPtr GetProcAddress(IntPtr hModule, [MarshalAs(UnmanagedType.LPStr)]string lpProcName);
 
         private IntPtr _pModule;
 
@@ -92,17 +92,27 @@ namespace FelicaLib
 
         #region IDisposable メンバ
 
+        /// <summary>
+        /// オブジェクトを破棄します。
+        /// </summary>
         ~BindDLL()
         {
             Dispose(false);
         }
 
+        /// <summary>
+        /// このオブジェクトで使用されているすべてのリソースを解放します。
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
+        /// <summary>
+        /// このオブジェクトで使用されているリソースを解放します。
+        /// </summary>
+        /// <param name="disposing">すべてのリソースを解放する場合は <see langword="true"/>。アンマネージ リソースのみを解放する場合は <see langword="false"/>。</param>
         protected virtual void Dispose(bool disposing)
         {
             if (_pModule != IntPtr.Zero)
@@ -127,6 +137,9 @@ namespace FelicaLib
         QUICPay = 0x04c1,       // QUICPay
     }
 
+    /// <summary>
+    /// FeliCa を通じて IC カードからデータを読み取るためのクラスを表します。
+    /// </summary>
     public class Felica : IDisposable
     {
         // 遅延ロード用Delegate定義
@@ -156,7 +169,7 @@ namespace FelicaLib
         private IntPtr felicap = IntPtr.Zero;
 
         /// <summary>
-        /// コンストラクタ
+        /// <see cref="Felica"/> クラスの新しいインスタンスを初期化します。
         /// </summary>
         public Felica()
         {
@@ -203,7 +216,7 @@ namespace FelicaLib
         #region IDisposable メンバ
 
         /// <summary>
-        /// デストラクタ
+        /// オブジェクトを破棄します。
         /// </summary>
         ~Felica()
         {
@@ -211,7 +224,7 @@ namespace FelicaLib
         }
 
         /// <summary>
-        /// オブジェクト破棄時処理
+        /// このオブジェクトで使用されているすべてのリソースを解放します。
         /// </summary>
         public void Dispose()
         {
@@ -219,6 +232,10 @@ namespace FelicaLib
             GC.SuppressFinalize(this);
         }
 
+        /// <summary>
+        /// このオブジェクトで使用されているリソースを解放します。
+        /// </summary>
+        /// <param name="disposing">すべてのリソースを解放する場合は <see langword="true"/>。アンマネージ リソースのみを解放する場合は <see langword="false"/>。</param>
         protected virtual void Dispose(bool disposing)
         {
             if (pasorip != IntPtr.Zero)
