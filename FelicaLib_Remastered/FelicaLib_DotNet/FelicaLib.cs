@@ -248,6 +248,18 @@ namespace FelicaLib
         /// <param name="disposing">すべてのリソースを解放する場合は <see langword="true"/>。アンマネージ リソースのみを解放する場合は <see langword="false"/>。</param>
         protected virtual void Dispose(bool disposing)
         {
+            if (felicap != IntPtr.Zero)
+            {
+                try
+                {
+                    felica_free(felicap);
+                    felicap = IntPtr.Zero;
+                }
+                catch (AccessViolationException)
+                {
+                }
+            }
+
             if (pasorip != IntPtr.Zero)
             {
                 try
