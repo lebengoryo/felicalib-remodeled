@@ -43,18 +43,21 @@ using System.Text;
 
 namespace FelicaLib
 {
+    static class NativeMethods
+    {
+        [DllImport("kernel32", CharSet = CharSet.Unicode, SetLastError = true)]
+        public static extern IntPtr LoadLibrary([MarshalAs(UnmanagedType.LPWStr)]string lpFileName);
+        [DllImport("kernel32", SetLastError = true)]
+        public static extern bool FreeLibrary(IntPtr hModule);
+        [DllImport("kernel32", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = false)]
+        public static extern IntPtr GetProcAddress(IntPtr hModule, [MarshalAs(UnmanagedType.LPStr)]string lpProcName);
+    }
+
     /// <summary>
     /// DLL遅延バインディングクラス
     /// </summary>
     public class BindDLL : IDisposable
     {
-        [DllImport("kernel32", CharSet = CharSet.Unicode, SetLastError = true)]
-        private static extern IntPtr LoadLibrary([MarshalAs(UnmanagedType.LPWStr)]string lpFileName);
-        [DllImport("kernel32", SetLastError = true)]
-        private static extern bool FreeLibrary(IntPtr hModule);
-        [DllImport("kernel32", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = false)]
-        private static extern IntPtr GetProcAddress(IntPtr hModule, [MarshalAs(UnmanagedType.LPStr)]string lpProcName);
-
         private IntPtr _pModule;
 
         /// <summary>
@@ -63,7 +66,7 @@ namespace FelicaLib
         /// <param name="szFilename">バインドするDLL名</param>
         public BindDLL(string szFilename)
         {
-            _pModule = BindDLL.LoadLibrary(szFilename);
+            _pModule = NativeMethods.LoadLibrary(szFilename);
             if (_pModule != IntPtr.Zero)
             {
                 return;
@@ -80,7 +83,7 @@ namespace FelicaLib
         /// <returns>変換したデリゲート</returns>
         public Delegate GetDelegate(string szProcName, Type typDelegate)
         {
-            IntPtr pProc = BindDLL.GetProcAddress(_pModule, szProcName);
+            IntPtr pProc = NativeMethods.GetProcAddress(_pModule, szProcName);
             if (pProc != IntPtr.Zero)
             {
                 Delegate oDG = Marshal.GetDelegateForFunctionPointer(pProc, typDelegate);
@@ -119,7 +122,7 @@ namespace FelicaLib
             // MEMO: したがって、このオブジェクトは Felica クラスにおいて、アンマネージ リソースとして管理されます。
             if (disposing && _pModule != IntPtr.Zero)
             {
-                BindDLL.FreeLibrary(_pModule);
+                NativeMethods.FreeLibrary(_pModule);
                 _pModule = IntPtr.Zero;
             }
         }
