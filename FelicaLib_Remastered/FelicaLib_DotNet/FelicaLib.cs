@@ -57,8 +57,19 @@ namespace FelicaLib
         public static extern IntPtr GetProcAddress(IntPtr hModule, [MarshalAs(UnmanagedType.LPStr)]string lpProcName);
     }
 
+    /// <summary>
+    /// ネイティブ関数を .NET 向けに拡張します。
+    /// </summary>
+    /// <remarks>
+    /// http://msdn.microsoft.com/ja-jp/library/cc429019.aspx
+    /// </remarks>
     static class NativeMethodsHelper
     {
+        /// <summary>
+        /// 指定された実行可能モジュールを、呼び出し側プロセスのアドレス空間内にマップします。
+        /// </summary>
+        /// <param name="fileName">モジュールのファイル名。</param>
+        /// <returns>モジュールのハンドル。</returns>
         public static IntPtr LoadLibrary(string fileName)
         {
             var ptr = NativeMethods.LoadLibrary(fileName);
@@ -70,6 +81,10 @@ namespace FelicaLib
             return ptr;
         }
 
+        /// <summary>
+        /// ロード済みの DLL モジュールの参照カウントを 1 つ減らします。
+        /// </summary>
+        /// <param name="module">DLL モジュールのハンドル。</param>
         public static void FreeLibrary(IntPtr module)
         {
             var result = NativeMethods.FreeLibrary(module);
@@ -80,6 +95,12 @@ namespace FelicaLib
             }
         }
 
+        /// <summary>
+        /// DLL が持つ、指定されたエクスポート済み関数のアドレスを取得します。
+        /// </summary>
+        /// <param name="module">DLL モジュールのハンドル。</param>
+        /// <param name="procName">関数名。</param>
+        /// <returns>DLL のエクスポート済み関数のアドレス。</returns>
         public static IntPtr GetProcAddress(IntPtr module, string procName)
         {
             var ptr = UnsafeNativeMethods.GetProcAddress(module, procName);
