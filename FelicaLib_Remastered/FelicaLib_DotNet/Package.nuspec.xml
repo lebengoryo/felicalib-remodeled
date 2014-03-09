@@ -10,7 +10,7 @@
     <projectUrl>https://github.com/sakapon/felicalib-remastered</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Make the library available on NuGet.</releaseNotes>
+    <releaseNotes>Apply the Disposable pattern.</releaseNotes>
     <copyright>$copyright$</copyright>
     <tags>FeliCa PaSoRi</tags>
   </metadata>
