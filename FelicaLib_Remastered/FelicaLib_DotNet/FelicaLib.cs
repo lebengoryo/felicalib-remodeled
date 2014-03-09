@@ -114,71 +114,6 @@ namespace FelicaLib
     }
 
     /// <summary>
-    /// DLL遅延バインディングクラス
-    /// </summary>
-    public class BindDLL : IDisposable
-    {
-        private IntPtr _pModule;
-
-        /// <summary>
-        /// DLLのロード・オブジェクト生成
-        /// </summary>
-        /// <param name="szFilename">バインドするDLL名</param>
-        public BindDLL(string szFilename)
-        {
-            _pModule = NativeMethodsHelper.LoadLibrary(szFilename);
-        }
-
-        /// <summary>
-        /// 指定名のアンマネージ関数ポインタをデリゲートに変換
-        /// </summary>
-        /// <param name="procName">アンマネージ関数名</param>
-        /// <param name="delegateType">変換するデリゲートのType</param>
-        /// <returns>変換したデリゲート</returns>
-        public Delegate GetDelegate(string procName, Type delegateType)
-        {
-            var proc = NativeMethodsHelper.GetProcAddress(_pModule, procName);
-            return Marshal.GetDelegateForFunctionPointer(proc, delegateType);
-        }
-
-        #region IDisposable メンバ
-
-        /// <summary>
-        /// オブジェクトを破棄します。
-        /// </summary>
-        ~BindDLL()
-        {
-            Dispose(false);
-        }
-
-        /// <summary>
-        /// このオブジェクトで使用されているすべてのリソースを解放します。
-        /// </summary>
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        /// <summary>
-        /// このオブジェクトで使用されているリソースを解放します。
-        /// </summary>
-        /// <param name="disposing">すべてのリソースを解放する場合は <see langword="true"/>。アンマネージ リソースのみを解放する場合は <see langword="false"/>。</param>
-        protected virtual void Dispose(bool disposing)
-        {
-            // MEMO: Felica オブジェクトよりも先に DLL が解放されるのを防ぐため、Dispose メソッドが呼び出されたときのみ解放します。
-            // MEMO: したがって、このオブジェクトは Felica クラスにおいて、アンマネージ リソースとして管理されます。
-            if (disposing && _pModule != IntPtr.Zero)
-            {
-                NativeMethodsHelper.FreeLibrary(_pModule);
-                _pModule = IntPtr.Zero;
-            }
-        }
-
-        #endregion
-    }
-
-    /// <summary>
     /// FeliCa のシステム コードを表します。
     /// </summary>
     public enum FelicaSystemCode
@@ -224,7 +159,7 @@ namespace FelicaLib
         private Felica_read_without_encryption02 felica_read_without_encryption02 = null;
 
         private string szDLLname = "";
-        private BindDLL bdDLL = null;
+        private IntPtr _pModule;
 
         private IntPtr pasorip = IntPtr.Zero;
         private IntPtr felicap = IntPtr.Zero;
@@ -247,16 +182,16 @@ namespace FelicaLib
                     szDLLname = "felicalib.dll";
                 }
                 // DLLロード
-                bdDLL = new BindDLL(szDLLname);
+                _pModule = NativeMethodsHelper.LoadLibrary(szDLLname);
                 // エントリー取得
-                pasori_open = (Pasori_open)bdDLL.GetDelegate("pasori_open", typeof(Pasori_open));
-                pasori_close = (Pasori_close)bdDLL.GetDelegate("pasori_close", typeof(Pasori_close));
-                pasori_init = (Pasori_init)bdDLL.GetDelegate("pasori_init", typeof(Pasori_init));
-                felica_polling = (Felica_polling)bdDLL.GetDelegate("felica_polling", typeof(Felica_polling));
-                felica_free = (Felica_free)bdDLL.GetDelegate("felica_free", typeof(Felica_free));
-                felica_getidm = (Felica_getidm)bdDLL.GetDelegate("felica_getidm", typeof(Felica_getidm));
-                felica_getpmm = (Felica_getpmm)bdDLL.GetDelegate("felica_getpmm", typeof(Felica_getpmm));
-                felica_read_without_encryption02 = (Felica_read_without_encryption02)bdDLL.GetDelegate("felica_read_without_encryption02", typeof(Felica_read_without_encryption02));
+                pasori_open = (Pasori_open)GetDelegate("pasori_open", typeof(Pasori_open));
+                pasori_close = (Pasori_close)GetDelegate("pasori_close", typeof(Pasori_close));
+                pasori_init = (Pasori_init)GetDelegate("pasori_init", typeof(Pasori_init));
+                felica_polling = (Felica_polling)GetDelegate("felica_polling", typeof(Felica_polling));
+                felica_free = (Felica_free)GetDelegate("felica_free", typeof(Felica_free));
+                felica_getidm = (Felica_getidm)GetDelegate("felica_getidm", typeof(Felica_getidm));
+                felica_getpmm = (Felica_getpmm)GetDelegate("felica_getpmm", typeof(Felica_getpmm));
+                felica_read_without_encryption02 = (Felica_read_without_encryption02)GetDelegate("felica_read_without_encryption02", typeof(Felica_read_without_encryption02));
             }
             catch (Exception)
             {
@@ -272,6 +207,18 @@ namespace FelicaLib
             {
                 throw new Exception("PaSoRi に接続できません");
             }
+        }
+
+        /// <summary>
+        /// 指定名のアンマネージ関数ポインタをデリゲートに変換
+        /// </summary>
+        /// <param name="procName">アンマネージ関数名</param>
+        /// <param name="delegateType">変換するデリゲートのType</param>
+        /// <returns>変換したデリゲート</returns>
+        public Delegate GetDelegate(string procName, Type delegateType)
+        {
+            var proc = NativeMethodsHelper.GetProcAddress(_pModule, procName);
+            return Marshal.GetDelegateForFunctionPointer(proc, delegateType);
         }
 
         #region IDisposable メンバ
@@ -299,6 +246,7 @@ namespace FelicaLib
         /// <param name="disposing">すべてのリソースを解放する場合は <see langword="true"/>。アンマネージ リソースのみを解放する場合は <see langword="false"/>。</param>
         protected virtual void Dispose(bool disposing)
         {
+            // MEMO: 読み込みとは逆の順序でリソースを解放します。
             if (felicap != IntPtr.Zero)
             {
                 try
@@ -323,10 +271,10 @@ namespace FelicaLib
                 }
             }
 
-            if (bdDLL != null)
+            if (_pModule != IntPtr.Zero)
             {
-                bdDLL.Dispose();
-                bdDLL = null;
+                NativeMethodsHelper.FreeLibrary(_pModule);
+                _pModule = IntPtr.Zero;
             }
         }
 
