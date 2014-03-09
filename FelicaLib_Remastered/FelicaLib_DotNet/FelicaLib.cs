@@ -111,6 +111,19 @@ namespace FelicaLib
             }
             return ptr;
         }
+
+        /// <summary>
+        /// DLL が持つ、指定されたエクスポート済み関数をデリゲートとして取得します。
+        /// </summary>
+        /// <typeparam name="T">デリゲートの型。</typeparam>
+        /// <param name="module">DLL モジュールのハンドル。</param>
+        /// <param name="procName">関数名。</param>
+        /// <returns>デリゲート。</returns>
+        public static T GetDelegate<T>(IntPtr module, string procName) where T : class
+        {
+            var proc = GetProcAddress(module, procName);
+            return Marshal.GetDelegateForFunctionPointer(proc, typeof(T)) as T;
+        }
     }
 
     /// <summary>
@@ -184,14 +197,14 @@ namespace FelicaLib
                 // DLLロード
                 _pModule = NativeMethodsHelper.LoadLibrary(szDLLname);
                 // エントリー取得
-                pasori_open = (Pasori_open)GetDelegate("pasori_open", typeof(Pasori_open));
-                pasori_close = (Pasori_close)GetDelegate("pasori_close", typeof(Pasori_close));
-                pasori_init = (Pasori_init)GetDelegate("pasori_init", typeof(Pasori_init));
-                felica_polling = (Felica_polling)GetDelegate("felica_polling", typeof(Felica_polling));
-                felica_free = (Felica_free)GetDelegate("felica_free", typeof(Felica_free));
-                felica_getidm = (Felica_getidm)GetDelegate("felica_getidm", typeof(Felica_getidm));
-                felica_getpmm = (Felica_getpmm)GetDelegate("felica_getpmm", typeof(Felica_getpmm));
-                felica_read_without_encryption02 = (Felica_read_without_encryption02)GetDelegate("felica_read_without_encryption02", typeof(Felica_read_without_encryption02));
+                pasori_open = NativeMethodsHelper.GetDelegate<Pasori_open>(_pModule, "pasori_open");
+                pasori_close = NativeMethodsHelper.GetDelegate<Pasori_close>(_pModule, "pasori_close");
+                pasori_init = NativeMethodsHelper.GetDelegate<Pasori_init>(_pModule, "pasori_init");
+                felica_polling = NativeMethodsHelper.GetDelegate<Felica_polling>(_pModule, "felica_polling");
+                felica_free = NativeMethodsHelper.GetDelegate<Felica_free>(_pModule, "felica_free");
+                felica_getidm = NativeMethodsHelper.GetDelegate<Felica_getidm>(_pModule, "felica_getidm");
+                felica_getpmm = NativeMethodsHelper.GetDelegate<Felica_getpmm>(_pModule, "felica_getpmm");
+                felica_read_without_encryption02 = NativeMethodsHelper.GetDelegate<Felica_read_without_encryption02>(_pModule, "felica_read_without_encryption02");
             }
             catch (Exception)
             {
@@ -207,18 +220,6 @@ namespace FelicaLib
             {
                 throw new Exception("PaSoRi に接続できません");
             }
-        }
-
-        /// <summary>
-        /// 指定名のアンマネージ関数ポインタをデリゲートに変換
-        /// </summary>
-        /// <param name="procName">アンマネージ関数名</param>
-        /// <param name="delegateType">変換するデリゲートのType</param>
-        /// <returns>変換したデリゲート</returns>
-        public Delegate GetDelegate(string procName, Type delegateType)
-        {
-            var proc = NativeMethodsHelper.GetProcAddress(_pModule, procName);
-            return Marshal.GetDelegateForFunctionPointer(proc, delegateType);
         }
 
         #region IDisposable メンバ
