@@ -57,6 +57,41 @@ namespace FelicaLib
         public static extern IntPtr GetProcAddress(IntPtr hModule, [MarshalAs(UnmanagedType.LPStr)]string lpProcName);
     }
 
+    static class NativeMethodsHelper
+    {
+        public static IntPtr LoadLibrary(string fileName)
+        {
+            var ptr = NativeMethods.LoadLibrary(fileName);
+            if (ptr == IntPtr.Zero)
+            {
+                var hResult = Marshal.GetHRForLastWin32Error();
+                throw Marshal.GetExceptionForHR(hResult);
+            }
+            return ptr;
+        }
+
+        public static void FreeLibrary(IntPtr module)
+        {
+            var result = NativeMethods.FreeLibrary(module);
+            if (!result)
+            {
+                var hResult = Marshal.GetHRForLastWin32Error();
+                throw Marshal.GetExceptionForHR(hResult);
+            }
+        }
+
+        public static IntPtr GetProcAddress(IntPtr module, string procName)
+        {
+            var ptr = UnsafeNativeMethods.GetProcAddress(module, procName);
+            if (ptr == IntPtr.Zero)
+            {
+                var hResult = Marshal.GetHRForLastWin32Error();
+                throw Marshal.GetExceptionForHR(hResult);
+            }
+            return ptr;
+        }
+    }
+
     /// <summary>
     /// DLL遅延バインディングクラス
     /// </summary>
@@ -70,31 +105,19 @@ namespace FelicaLib
         /// <param name="szFilename">バインドするDLL名</param>
         public BindDLL(string szFilename)
         {
-            _pModule = NativeMethods.LoadLibrary(szFilename);
-            if (_pModule != IntPtr.Zero)
-            {
-                return;
-            }
-            int nResult = Marshal.GetHRForLastWin32Error();
-            throw Marshal.GetExceptionForHR(nResult);
+            _pModule = NativeMethodsHelper.LoadLibrary(szFilename);
         }
 
         /// <summary>
         /// 指定名のアンマネージ関数ポインタをデリゲートに変換
         /// </summary>
-        /// <param name="szProcName">アンマネージ関数名</param>
-        /// <param name="typDelegate">変換するデリゲートのType</param>
+        /// <param name="procName">アンマネージ関数名</param>
+        /// <param name="delegateType">変換するデリゲートのType</param>
         /// <returns>変換したデリゲート</returns>
-        public Delegate GetDelegate(string szProcName, Type typDelegate)
+        public Delegate GetDelegate(string procName, Type delegateType)
         {
-            IntPtr pProc = UnsafeNativeMethods.GetProcAddress(_pModule, szProcName);
-            if (pProc != IntPtr.Zero)
-            {
-                Delegate oDG = Marshal.GetDelegateForFunctionPointer(pProc, typDelegate);
-                return oDG;
-            }
-            int nResult = Marshal.GetHRForLastWin32Error();
-            throw Marshal.GetExceptionForHR(nResult);
+            var proc = NativeMethodsHelper.GetProcAddress(_pModule, procName);
+            return Marshal.GetDelegateForFunctionPointer(proc, delegateType);
         }
 
         #region IDisposable メンバ
@@ -126,7 +149,7 @@ namespace FelicaLib
             // MEMO: したがって、このオブジェクトは Felica クラスにおいて、アンマネージ リソースとして管理されます。
             if (disposing && _pModule != IntPtr.Zero)
             {
-                NativeMethods.FreeLibrary(_pModule);
+                NativeMethodsHelper.FreeLibrary(_pModule);
                 _pModule = IntPtr.Zero;
             }
         }
