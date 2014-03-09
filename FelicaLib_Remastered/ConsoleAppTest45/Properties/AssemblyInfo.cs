@@ -5,14 +5,12 @@ using System.Runtime.InteropServices;
 // アセンブリに関する一般情報は以下の属性セットをとおして制御されます。
 // アセンブリに関連付けられている情報を変更するには、
 // これらの属性値を変更してください。
-[assembly: AssemblyTitle("felicalib Remastered")]
-[assembly: AssemblyDescription(@"FeliCa access wrapper library.
-「felicalib 改」です。
-プロジェクトに追加された felicalib.dll のプロパティを開き、[出力ディレクトリにコピー] を [新しい場合はコピーする] に設定してください。")]
+[assembly: AssemblyTitle("ConsoleAppTest45")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Keiho Sakapon")]
-[assembly: AssemblyProduct("felicalib")]
-[assembly: AssemblyCopyright("© 2014 Keiho Sakapon.")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("ConsoleAppTest45")]
+[assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -22,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // 次の GUID は、このプロジェクトが COM に公開される場合の、typelib の ID です
-[assembly: Guid("6f052bdc-7d4f-47a4-969b-f08eb5a7cc2c")]
+[assembly: Guid("5d9e4d74-4805-45e4-a0c4-457237191b58")]
 
 // アセンブリのバージョン情報は、以下の 4 つの値で構成されています:
 //
@@ -34,5 +32,5 @@ using System.Runtime.InteropServices;
 // すべての値を指定するか、下のように '*' を使ってビルドおよびリビジョン番号を 
 // 既定値にすることができます:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.1.6.0")]
-[assembly: AssemblyFileVersion("1.1.6.0")]
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]
