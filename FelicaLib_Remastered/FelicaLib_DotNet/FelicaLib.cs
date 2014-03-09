@@ -49,7 +49,11 @@ namespace FelicaLib
         public static extern IntPtr LoadLibrary([MarshalAs(UnmanagedType.LPWStr)]string lpFileName);
         [DllImport("kernel32", SetLastError = true)]
         public static extern bool FreeLibrary(IntPtr hModule);
-        [DllImport("kernel32", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = false)]
+    }
+
+    static class UnsafeNativeMethods
+    {
+        [DllImport("kernel32", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true, BestFitMapping = false, ThrowOnUnmappableChar = true)]
         public static extern IntPtr GetProcAddress(IntPtr hModule, [MarshalAs(UnmanagedType.LPStr)]string lpProcName);
     }
 
@@ -83,7 +87,7 @@ namespace FelicaLib
         /// <returns>変換したデリゲート</returns>
         public Delegate GetDelegate(string szProcName, Type typDelegate)
         {
-            IntPtr pProc = NativeMethods.GetProcAddress(_pModule, szProcName);
+            IntPtr pProc = UnsafeNativeMethods.GetProcAddress(_pModule, szProcName);
             if (pProc != IntPtr.Zero)
             {
                 Delegate oDG = Marshal.GetDelegateForFunctionPointer(pProc, typDelegate);
