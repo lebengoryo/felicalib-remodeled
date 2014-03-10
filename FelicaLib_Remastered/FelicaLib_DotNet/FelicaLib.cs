@@ -340,9 +340,9 @@ namespace FelicaLib
                 throw new Exception("no polling executed.");
             }
 
-            byte[] buf = new byte[8];
-            felica_getidm(felicaPtr, buf);
-            return buf;
+            var data = new byte[8];
+            felica_getidm(felicaPtr, data);
+            return data;
         }
 
         /// <summary>
@@ -356,9 +356,9 @@ namespace FelicaLib
                 throw new Exception("no polling executed.");
             }
 
-            byte[] buf = new byte[8];
-            felica_getpmm(felicaPtr, buf);
-            return buf;
+            var data = new byte[8];
+            felica_getpmm(felicaPtr, data);
+            return data;
         }
 
         /// <summary>
@@ -374,9 +374,9 @@ namespace FelicaLib
                 throw new Exception("no polling executed.");
             }
 
-            byte[] data = new byte[16];
-            int ret = felica_read_without_encryption02(felicaPtr, serviceCode, 0, (byte)address, data);
-            if (ret != 0)
+            var data = new byte[16];
+            var result = felica_read_without_encryption02(felicaPtr, serviceCode, 0, (byte)address, data);
+            if (result != 0)
             {
                 return null;
             }
