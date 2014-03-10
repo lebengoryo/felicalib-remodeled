@@ -162,7 +162,7 @@ namespace FelicaLib
     {
         #region DLL およびデリゲート
 
-        // 遅延ロード用Delegate定義
+        // 遅延ロード用デリゲートの定義
         delegate IntPtr Pasori_open(string dummy);
         delegate int Pasori_close(IntPtr p);
         delegate int Pasori_init(IntPtr p);
@@ -172,7 +172,7 @@ namespace FelicaLib
         delegate void Felica_getpmm(IntPtr f, byte[] data);
         delegate int Felica_read_without_encryption02(IntPtr f, int servicecode, int mode, byte addr, byte[] data);
 
-        // 遅延ロード用Delegate
+        // 遅延ロード用デリゲートの実体
         Pasori_open pasori_open;
         Pasori_close pasori_close;
         Pasori_init pasori_init;
@@ -184,24 +184,24 @@ namespace FelicaLib
 
         void LoadDllAndDelegates()
         {
-            _pModule = NativeMethodsHelper.LoadLibrary(szDLLname);
+            dllModulePtr = NativeMethodsHelper.LoadLibrary(dllFileName);
 
-            pasori_open = NativeMethodsHelper.GetDelegate<Pasori_open>(_pModule, "pasori_open");
-            pasori_close = NativeMethodsHelper.GetDelegate<Pasori_close>(_pModule, "pasori_close");
-            pasori_init = NativeMethodsHelper.GetDelegate<Pasori_init>(_pModule, "pasori_init");
-            felica_polling = NativeMethodsHelper.GetDelegate<Felica_polling>(_pModule, "felica_polling");
-            felica_free = NativeMethodsHelper.GetDelegate<Felica_free>(_pModule, "felica_free");
-            felica_getidm = NativeMethodsHelper.GetDelegate<Felica_getidm>(_pModule, "felica_getidm");
-            felica_getpmm = NativeMethodsHelper.GetDelegate<Felica_getpmm>(_pModule, "felica_getpmm");
-            felica_read_without_encryption02 = NativeMethodsHelper.GetDelegate<Felica_read_without_encryption02>(_pModule, "felica_read_without_encryption02");
+            pasori_open = NativeMethodsHelper.GetDelegate<Pasori_open>(dllModulePtr, "pasori_open");
+            pasori_close = NativeMethodsHelper.GetDelegate<Pasori_close>(dllModulePtr, "pasori_close");
+            pasori_init = NativeMethodsHelper.GetDelegate<Pasori_init>(dllModulePtr, "pasori_init");
+            felica_polling = NativeMethodsHelper.GetDelegate<Felica_polling>(dllModulePtr, "felica_polling");
+            felica_free = NativeMethodsHelper.GetDelegate<Felica_free>(dllModulePtr, "felica_free");
+            felica_getidm = NativeMethodsHelper.GetDelegate<Felica_getidm>(dllModulePtr, "felica_getidm");
+            felica_getpmm = NativeMethodsHelper.GetDelegate<Felica_getpmm>(dllModulePtr, "felica_getpmm");
+            felica_read_without_encryption02 = NativeMethodsHelper.GetDelegate<Felica_read_without_encryption02>(dllModulePtr, "felica_read_without_encryption02");
         }
 
         #endregion
 
-        string szDLLname;
-        IntPtr _pModule;
-        IntPtr pasorip;
-        IntPtr felicap;
+        string dllFileName;
+        IntPtr dllModulePtr;
+        IntPtr pasoriPtr;
+        IntPtr felicaPtr;
 
         /// <summary>
         /// <see cref="Felica"/> クラスの新しいインスタンスを初期化します。
@@ -210,7 +210,7 @@ namespace FelicaLib
         {
             // x64対応 20100501 - DeForest
             // プラットフォーム別のロードモジュール名決定（x64/x86サポート、Iteniumはサポート外）
-            szDLLname = IntPtr.Size >= 8 ? "felicalib64.dll" : "felicalib.dll";
+            dllFileName = IntPtr.Size >= 8 ? "felicalib64.dll" : "felicalib.dll";
 
             try
             {
@@ -218,14 +218,14 @@ namespace FelicaLib
             }
             catch (Exception)
             {
-                throw new Exception(szDLLname + " をロードできません");
+                throw new Exception(dllFileName + " をロードできません");
             }
 
-            if ((pasorip = pasori_open(null)) == IntPtr.Zero)
+            if ((pasoriPtr = pasori_open(null)) == IntPtr.Zero)
             {
-                throw new Exception(szDLLname + " を開けません");
+                throw new Exception(dllFileName + " を開けません");
             }
-            if (pasori_init(pasorip) != 0)
+            if (pasori_init(pasoriPtr) != 0)
             {
                 throw new Exception("PaSoRi に接続できません");
             }
@@ -257,12 +257,12 @@ namespace FelicaLib
         protected virtual void Dispose(bool disposing)
         {
             // 読み込みとは逆の順序でリソースを解放します。
-            if (felicap != IntPtr.Zero)
+            if (felicaPtr != IntPtr.Zero)
             {
                 try
                 {
-                    felica_free(felicap);
-                    felicap = IntPtr.Zero;
+                    felica_free(felicaPtr);
+                    felicaPtr = IntPtr.Zero;
                 }
                 catch (Exception ex)
                 {
@@ -272,12 +272,12 @@ namespace FelicaLib
                 }
             }
 
-            if (pasorip != IntPtr.Zero)
+            if (pasoriPtr != IntPtr.Zero)
             {
                 try
                 {
-                    pasori_close(pasorip);
-                    pasorip = IntPtr.Zero;
+                    pasori_close(pasoriPtr);
+                    pasoriPtr = IntPtr.Zero;
                 }
                 catch (Exception ex)
                 {
@@ -287,12 +287,12 @@ namespace FelicaLib
                 }
             }
 
-            if (_pModule != IntPtr.Zero)
+            if (dllModulePtr != IntPtr.Zero)
             {
                 try
                 {
-                    NativeMethodsHelper.FreeLibrary(_pModule);
-                    _pModule = IntPtr.Zero;
+                    NativeMethodsHelper.FreeLibrary(dllModulePtr);
+                    dllModulePtr = IntPtr.Zero;
                 }
                 catch (Exception ex)
                 {
@@ -320,10 +320,10 @@ namespace FelicaLib
         /// <param name="systemcode">システムコード</param>
         public void Polling(int systemcode)
         {
-            felica_free(felicap);
+            felica_free(felicaPtr);
 
-            felicap = felica_polling(pasorip, (ushort)systemcode, 0, 0);
-            if (felicap == IntPtr.Zero)
+            felicaPtr = felica_polling(pasoriPtr, (ushort)systemcode, 0, 0);
+            if (felicaPtr == IntPtr.Zero)
             {
                 throw new Exception("カード読み取り失敗");
             }
@@ -335,13 +335,13 @@ namespace FelicaLib
         /// <returns>IDmバイナリデータ</returns>
         public byte[] IDm()
         {
-            if (felicap == IntPtr.Zero)
+            if (felicaPtr == IntPtr.Zero)
             {
                 throw new Exception("no polling executed.");
             }
 
             byte[] buf = new byte[8];
-            felica_getidm(felicap, buf);
+            felica_getidm(felicaPtr, buf);
             return buf;
         }
 
@@ -351,13 +351,13 @@ namespace FelicaLib
         /// <returns>PMmバイナリデータ</returns>
         public byte[] PMm()
         {
-            if (felicap == IntPtr.Zero)
+            if (felicaPtr == IntPtr.Zero)
             {
                 throw new Exception("no polling executed.");
             }
 
             byte[] buf = new byte[8];
-            felica_getpmm(felicap, buf);
+            felica_getpmm(felicaPtr, buf);
             return buf;
         }
 
@@ -369,13 +369,13 @@ namespace FelicaLib
         /// <returns>データ</returns>
         public byte[] ReadWithoutEncryption(int servicecode, int addr)
         {
-            if (felicap == IntPtr.Zero)
+            if (felicaPtr == IntPtr.Zero)
             {
                 throw new Exception("no polling executed.");
             }
 
             byte[] data = new byte[16];
-            int ret = felica_read_without_encryption02(felicap, servicecode, 0, (byte)addr, data);
+            int ret = felica_read_without_encryption02(felicaPtr, servicecode, 0, (byte)addr, data);
             if (ret != 0)
             {
                 return null;
