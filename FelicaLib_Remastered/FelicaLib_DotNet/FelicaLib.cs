@@ -325,7 +325,7 @@ namespace FelicaLib
             felicaPtr = felica_polling(pasoriPtr, (ushort)systemCode, 0, 0);
             if (felicaPtr == IntPtr.Zero)
             {
-                throw new Exception("カード読み取り失敗");
+                throw new InvalidOperationException("IC カードに接続できません。");
             }
         }
 
@@ -337,7 +337,7 @@ namespace FelicaLib
         {
             if (felicaPtr == IntPtr.Zero)
             {
-                throw new Exception("no polling executed.");
+                throw new InvalidOperationException("ポーリングが開始されていません。");
             }
 
             var data = new byte[8];
@@ -353,7 +353,7 @@ namespace FelicaLib
         {
             if (felicaPtr == IntPtr.Zero)
             {
-                throw new Exception("no polling executed.");
+                throw new InvalidOperationException("ポーリングが開始されていません。");
             }
 
             var data = new byte[8];
@@ -371,7 +371,7 @@ namespace FelicaLib
         {
             if (felicaPtr == IntPtr.Zero)
             {
-                throw new Exception("no polling executed.");
+                throw new InvalidOperationException("ポーリングが開始されていません。");
             }
 
             var data = new byte[16];
