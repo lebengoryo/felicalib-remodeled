@@ -156,6 +156,8 @@ namespace FelicaLib
     /// </summary>
     public class Felica : IDisposable
     {
+        #region DLL およびデリゲート
+
         // 遅延ロード用Delegate定義
         delegate IntPtr Pasori_open(string dummy);
         delegate int Pasori_close(IntPtr p);
@@ -175,6 +177,22 @@ namespace FelicaLib
         Felica_getidm felica_getidm;
         Felica_getpmm felica_getpmm;
         Felica_read_without_encryption02 felica_read_without_encryption02;
+
+        void LoadDllAndDelegates()
+        {
+            _pModule = NativeMethodsHelper.LoadLibrary(szDLLname);
+
+            pasori_open = NativeMethodsHelper.GetDelegate<Pasori_open>(_pModule, "pasori_open");
+            pasori_close = NativeMethodsHelper.GetDelegate<Pasori_close>(_pModule, "pasori_close");
+            pasori_init = NativeMethodsHelper.GetDelegate<Pasori_init>(_pModule, "pasori_init");
+            felica_polling = NativeMethodsHelper.GetDelegate<Felica_polling>(_pModule, "felica_polling");
+            felica_free = NativeMethodsHelper.GetDelegate<Felica_free>(_pModule, "felica_free");
+            felica_getidm = NativeMethodsHelper.GetDelegate<Felica_getidm>(_pModule, "felica_getidm");
+            felica_getpmm = NativeMethodsHelper.GetDelegate<Felica_getpmm>(_pModule, "felica_getpmm");
+            felica_read_without_encryption02 = NativeMethodsHelper.GetDelegate<Felica_read_without_encryption02>(_pModule, "felica_read_without_encryption02");
+        }
+
+        #endregion
 
         string szDLLname;
         IntPtr _pModule;
@@ -198,17 +216,7 @@ namespace FelicaLib
                 {
                     szDLLname = "felicalib.dll";
                 }
-                // DLLロード
-                _pModule = NativeMethodsHelper.LoadLibrary(szDLLname);
-                // エントリー取得
-                pasori_open = NativeMethodsHelper.GetDelegate<Pasori_open>(_pModule, "pasori_open");
-                pasori_close = NativeMethodsHelper.GetDelegate<Pasori_close>(_pModule, "pasori_close");
-                pasori_init = NativeMethodsHelper.GetDelegate<Pasori_init>(_pModule, "pasori_init");
-                felica_polling = NativeMethodsHelper.GetDelegate<Felica_polling>(_pModule, "felica_polling");
-                felica_free = NativeMethodsHelper.GetDelegate<Felica_free>(_pModule, "felica_free");
-                felica_getidm = NativeMethodsHelper.GetDelegate<Felica_getidm>(_pModule, "felica_getidm");
-                felica_getpmm = NativeMethodsHelper.GetDelegate<Felica_getpmm>(_pModule, "felica_getpmm");
-                felica_read_without_encryption02 = NativeMethodsHelper.GetDelegate<Felica_read_without_encryption02>(_pModule, "felica_read_without_encryption02");
+                LoadDllAndDelegates();
             }
             catch (Exception)
             {
@@ -226,7 +234,7 @@ namespace FelicaLib
             }
         }
 
-        #region IDisposable メンバ
+        #region IDisposable メンバー
 
         /// <summary>
         /// オブジェクトを破棄します。
