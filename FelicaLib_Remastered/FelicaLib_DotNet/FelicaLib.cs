@@ -216,18 +216,18 @@ namespace FelicaLib
             {
                 LoadDllAndDelegates();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new Exception(dllFileName + " をロードできません");
+                throw new InvalidOperationException(string.Format("{0} をロードできません。", dllFileName), ex);
             }
 
             if ((pasoriPtr = pasori_open(null)) == IntPtr.Zero)
             {
-                throw new Exception(dllFileName + " を開けません");
+                throw new InvalidOperationException(string.Format("{0} を開けません。", dllFileName));
             }
             if (pasori_init(pasoriPtr) != 0)
             {
-                throw new Exception("PaSoRi に接続できません");
+                throw new InvalidOperationException("PaSoRi に接続できません。");
             }
         }
 
