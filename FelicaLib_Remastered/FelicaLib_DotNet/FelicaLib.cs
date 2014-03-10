@@ -308,21 +308,21 @@ namespace FelicaLib
         /// <summary>
         /// ポーリング
         /// </summary>
-        /// <param name="systemcode">システムコード</param>
-        public void Polling(FelicaSystemCode systemcode)
+        /// <param name="systemCode">システムコード</param>
+        public void Polling(FelicaSystemCode systemCode)
         {
-            Polling((int)systemcode);
+            Polling((int)systemCode);
         }
 
         /// <summary>
         /// ポーリング
         /// </summary>
-        /// <param name="systemcode">システムコード</param>
-        public void Polling(int systemcode)
+        /// <param name="systemCode">システムコード</param>
+        public void Polling(int systemCode)
         {
             felica_free(felicaPtr);
 
-            felicaPtr = felica_polling(pasoriPtr, (ushort)systemcode, 0, 0);
+            felicaPtr = felica_polling(pasoriPtr, (ushort)systemCode, 0, 0);
             if (felicaPtr == IntPtr.Zero)
             {
                 throw new Exception("カード読み取り失敗");
@@ -364,10 +364,10 @@ namespace FelicaLib
         /// <summary>
         /// 非暗号化領域読み込み
         /// </summary>
-        /// <param name="servicecode">サービスコード</param>
-        /// <param name="addr">アドレス</param>
+        /// <param name="serviceCode">サービスコード</param>
+        /// <param name="address">アドレス</param>
         /// <returns>データ</returns>
-        public byte[] ReadWithoutEncryption(int servicecode, int addr)
+        public byte[] ReadWithoutEncryption(int serviceCode, int address)
         {
             if (felicaPtr == IntPtr.Zero)
             {
@@ -375,7 +375,7 @@ namespace FelicaLib
             }
 
             byte[] data = new byte[16];
-            int ret = felica_read_without_encryption02(felicaPtr, servicecode, 0, (byte)addr, data);
+            int ret = felica_read_without_encryption02(felicaPtr, serviceCode, 0, (byte)address, data);
             if (ret != 0)
             {
                 return null;
