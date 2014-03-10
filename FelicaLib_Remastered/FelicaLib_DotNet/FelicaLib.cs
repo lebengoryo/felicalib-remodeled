@@ -119,15 +119,19 @@ namespace FelicaLib
         /// <summary>
         /// DLL が持つ、指定されたエクスポート済み関数をデリゲートとして取得します。
         /// </summary>
-        /// <typeparam name="T">デリゲートの型。</typeparam>
+        /// <typeparam name="TDelegate">デリゲートの型。</typeparam>
         /// <param name="module">DLL モジュールのハンドル。</param>
         /// <param name="procName">関数名。</param>
         /// <returns>デリゲート。</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
-        public static T GetDelegate<T>(IntPtr module, string procName) where T : class
+        public static TDelegate GetDelegate<TDelegate>(IntPtr module, string procName) where TDelegate : class
         {
+            if (!typeof(TDelegate).IsSubclassOf(typeof(Delegate)))
+            {
+                throw new InvalidOperationException("TDelegate はデリゲート型でなければなりません。");
+            }
             var proc = GetProcAddress(module, procName);
-            return Marshal.GetDelegateForFunctionPointer(proc, typeof(T)) as T;
+            return Marshal.GetDelegateForFunctionPointer(proc, typeof(TDelegate)) as TDelegate;
         }
     }
 
