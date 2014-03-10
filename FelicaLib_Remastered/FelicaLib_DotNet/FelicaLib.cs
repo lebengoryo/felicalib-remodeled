@@ -70,6 +70,7 @@ namespace FelicaLib
         /// </summary>
         /// <param name="fileName">モジュールのファイル名。</param>
         /// <returns>モジュールのハンドル。</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         public static IntPtr LoadLibrary(string fileName)
         {
             var ptr = NativeMethods.LoadLibrary(fileName);
@@ -85,6 +86,7 @@ namespace FelicaLib
         /// ロード済みの DLL モジュールの参照カウントを 1 つ減らします。
         /// </summary>
         /// <param name="module">DLL モジュールのハンドル。</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         public static void FreeLibrary(IntPtr module)
         {
             var result = NativeMethods.FreeLibrary(module);
@@ -101,6 +103,7 @@ namespace FelicaLib
         /// <param name="module">DLL モジュールのハンドル。</param>
         /// <param name="procName">関数名。</param>
         /// <returns>DLL のエクスポート済み関数のアドレス。</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         public static IntPtr GetProcAddress(IntPtr module, string procName)
         {
             var ptr = UnsafeNativeMethods.GetProcAddress(module, procName);
@@ -119,6 +122,7 @@ namespace FelicaLib
         /// <param name="module">DLL モジュールのハンドル。</param>
         /// <param name="procName">関数名。</param>
         /// <returns>デリゲート。</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         public static T GetDelegate<T>(IntPtr module, string procName) where T : class
         {
             var proc = GetProcAddress(module, procName);
