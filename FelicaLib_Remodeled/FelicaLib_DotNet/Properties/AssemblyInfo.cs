@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // アセンブリに関する一般情報は以下の属性セットをとおして制御されます。
 // アセンブリに関連付けられている情報を変更するには、
 // これらの属性値を変更してください。
-[assembly: AssemblyTitle("felicalib Remastered")]
+[assembly: AssemblyTitle("felicalib Remodeled")]
 [assembly: AssemblyDescription(@"FeliCa access wrapper library.
 「felicalib 改」です。
 プロジェクトに追加された felicalib.dll のプロパティを開き、[出力ディレクトリにコピー] を [新しい場合はコピーする] に設定してください。")]
@@ -35,7 +35,7 @@ using System.Runtime.InteropServices;
 // すべての値を指定するか、下のように '*' を使ってビルドおよびリビジョン番号を 
 // 既定値にすることができます:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.2.24.0")]
-[assembly: AssemblyFileVersion("1.2.24.0")]
+[assembly: AssemblyVersion("1.2.25.0")]
+[assembly: AssemblyFileVersion("1.2.25.0")]
 
 [assembly: CLSCompliant(true)]

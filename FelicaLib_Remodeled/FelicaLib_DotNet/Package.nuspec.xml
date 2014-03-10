@@ -6,8 +6,8 @@
     <title>$title$</title>
     <authors>$author$</authors>
     <owners>$author$</owners>
-    <licenseUrl>https://github.com/sakapon/felicalib-remastered/blob/master/LICENSE</licenseUrl>
-    <projectUrl>https://github.com/sakapon/felicalib-remastered</projectUrl>
+    <licenseUrl>https://github.com/sakapon/felicalib-remodeled/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/sakapon/felicalib-remodeled</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <releaseNotes>Apply the Disposable pattern.</releaseNotes>
