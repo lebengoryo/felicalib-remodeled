@@ -10,7 +10,7 @@
     <projectUrl>https://github.com/sakapon/felicalib-remodeled</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Apply the Disposable pattern.</releaseNotes>
+    <releaseNotes>Improve the stability by redesigning classes.</releaseNotes>
     <copyright>$copyright$</copyright>
     <tags>FeliCa PaSoRi</tags>
   </metadata>
