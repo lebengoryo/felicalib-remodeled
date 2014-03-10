@@ -49,6 +49,7 @@ namespace FelicaLib
         [DllImport("kernel32", CharSet = CharSet.Unicode, SetLastError = true)]
         public static extern IntPtr LoadLibrary([MarshalAs(UnmanagedType.LPWStr)]string lpFileName);
         [DllImport("kernel32", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool FreeLibrary(IntPtr hModule);
     }
 
