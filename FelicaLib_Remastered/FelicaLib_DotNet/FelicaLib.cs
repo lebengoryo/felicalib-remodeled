@@ -157,30 +157,29 @@ namespace FelicaLib
     public class Felica : IDisposable
     {
         // 遅延ロード用Delegate定義
-        private delegate IntPtr Pasori_open(String dummy);
-        private delegate int Pasori_close(IntPtr p);
-        private delegate int Pasori_init(IntPtr p);
-        private delegate IntPtr Felica_polling(IntPtr p, ushort systemcode, byte rfu, byte time_slot);
-        private delegate void Felica_free(IntPtr f);
-        private delegate void Felica_getidm(IntPtr f, byte[] data);
-        private delegate void Felica_getpmm(IntPtr f, byte[] data);
-        private delegate int Felica_read_without_encryption02(IntPtr f, int servicecode, int mode, byte addr, byte[] data);
+        delegate IntPtr Pasori_open(string dummy);
+        delegate int Pasori_close(IntPtr p);
+        delegate int Pasori_init(IntPtr p);
+        delegate IntPtr Felica_polling(IntPtr p, ushort systemcode, byte rfu, byte time_slot);
+        delegate void Felica_free(IntPtr f);
+        delegate void Felica_getidm(IntPtr f, byte[] data);
+        delegate void Felica_getpmm(IntPtr f, byte[] data);
+        delegate int Felica_read_without_encryption02(IntPtr f, int servicecode, int mode, byte addr, byte[] data);
 
         // 遅延ロード用Delegate
-        private Pasori_open pasori_open = null;
-        private Pasori_close pasori_close = null;
-        private Pasori_init pasori_init = null;
-        private Felica_polling felica_polling = null;
-        private Felica_free felica_free = null;
-        private Felica_getidm felica_getidm = null;
-        private Felica_getpmm felica_getpmm = null;
-        private Felica_read_without_encryption02 felica_read_without_encryption02 = null;
+        Pasori_open pasori_open;
+        Pasori_close pasori_close;
+        Pasori_init pasori_init;
+        Felica_polling felica_polling;
+        Felica_free felica_free;
+        Felica_getidm felica_getidm;
+        Felica_getpmm felica_getpmm;
+        Felica_read_without_encryption02 felica_read_without_encryption02;
 
-        private string szDLLname = "";
-        private IntPtr _pModule;
-
-        private IntPtr pasorip = IntPtr.Zero;
-        private IntPtr felicap = IntPtr.Zero;
+        string szDLLname;
+        IntPtr _pModule;
+        IntPtr pasorip;
+        IntPtr felicap;
 
         /// <summary>
         /// <see cref="Felica"/> クラスの新しいインスタンスを初期化します。
