@@ -37,6 +37,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -251,7 +252,7 @@ namespace FelicaLib
         /// <param name="disposing">すべてのリソースを解放する場合は <see langword="true"/>。アンマネージ リソースのみを解放する場合は <see langword="false"/>。</param>
         protected virtual void Dispose(bool disposing)
         {
-            // MEMO: 読み込みとは逆の順序でリソースを解放します。
+            // 読み込みとは逆の順序でリソースを解放します。
             if (felicap != IntPtr.Zero)
             {
                 try
@@ -259,8 +260,11 @@ namespace FelicaLib
                     felica_free(felicap);
                     felicap = IntPtr.Zero;
                 }
-                catch (AccessViolationException)
+                catch (Exception ex)
                 {
+                    // 発生したことのある例外:
+                    // System.AccessViolationException
+                    Debug.WriteLine(ex);
                 }
             }
 
@@ -271,15 +275,27 @@ namespace FelicaLib
                     pasori_close(pasorip);
                     pasorip = IntPtr.Zero;
                 }
-                catch (AccessViolationException)
+                catch (Exception ex)
                 {
+                    // 発生したことのある例外:
+                    // System.AccessViolationException
+                    Debug.WriteLine(ex);
                 }
             }
 
             if (_pModule != IntPtr.Zero)
             {
-                NativeMethodsHelper.FreeLibrary(_pModule);
-                _pModule = IntPtr.Zero;
+                try
+                {
+                    NativeMethodsHelper.FreeLibrary(_pModule);
+                    _pModule = IntPtr.Zero;
+                }
+                catch (Exception ex)
+                {
+                    // 発生したことのある例外:
+                    // System.IO.FileNotFoundException
+                    Debug.WriteLine(ex);
+                }
             }
         }
 
