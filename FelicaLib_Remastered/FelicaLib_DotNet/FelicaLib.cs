@@ -205,17 +205,11 @@ namespace FelicaLib
         public Felica()
         {
             // x64対応 20100501 - DeForest
+            // プラットフォーム別のロードモジュール名決定（x64/x86サポート、Iteniumはサポート外）
+            szDLLname = IntPtr.Size >= 8 ? "felicalib64.dll" : "felicalib.dll";
+
             try
             {
-                // プラットフォーム別のロードモジュール名決定（x64/x86サポート、Iteniumはサポート外）
-                if (System.IntPtr.Size >= 8)    // x64
-                {
-                    szDLLname = "felicalib64.dll";
-                }
-                else                // x86
-                {
-                    szDLLname = "felicalib.dll";
-                }
                 LoadDllAndDelegates();
             }
             catch (Exception)
@@ -223,8 +217,7 @@ namespace FelicaLib
                 throw new Exception(szDLLname + " をロードできません");
             }
 
-            pasorip = pasori_open(null);
-            if (pasorip == IntPtr.Zero)
+            if ((pasorip = pasori_open(null)) == IntPtr.Zero)
             {
                 throw new Exception(szDLLname + " を開けません");
             }
