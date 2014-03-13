@@ -22,7 +22,7 @@ namespace ConsoleAppTest45
 
                         using (var felica = new Felica(FelicaSystemCode.Edy))
                         {
-                            Console.WriteLine(felica.IDm().ToHexString());
+                            Console.WriteLine(felica.GetIDm().ToHexString());
                         }
                     }
                     catch (Exception ex)

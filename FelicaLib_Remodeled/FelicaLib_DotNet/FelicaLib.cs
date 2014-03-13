@@ -338,6 +338,7 @@ namespace FelicaLib
 
             try
             {
+                // felica_polling 関数によるポーリングは、IC カードが範囲内に存在する場合のみ可能です。
                 if ((felicaPtr = felica_polling(pasoriPtr, (ushort)SystemCode, 0, 0)) == IntPtr.Zero)
                 {
                     throw new InvalidOperationException("IC カードに接続できません。");
@@ -355,10 +356,10 @@ namespace FelicaLib
         }
 
         /// <summary>
-        /// IDm取得
+        /// 製造 ID (IDm) を取得します。
         /// </summary>
-        /// <returns>IDmバイナリデータ</returns>
-        public byte[] IDm()
+        /// <returns>製造 ID (IDm)。</returns>
+        public byte[] GetIDm()
         {
             return TransferData(() =>
             {
@@ -369,10 +370,10 @@ namespace FelicaLib
         }
 
         /// <summary>
-        /// PMm取得
+        /// 製造パラメータ (PMm) を取得します。
         /// </summary>
-        /// <returns>PMmバイナリデータ</returns>
-        public byte[] PMm()
+        /// <returns>製造パラメータ (PMm)。</returns>
+        public byte[] GetPMm()
         {
             return TransferData(() =>
             {
@@ -383,11 +384,11 @@ namespace FelicaLib
         }
 
         /// <summary>
-        /// 非暗号化領域読み込み
+        /// 非暗号化領域のデータを読み込みます。
         /// </summary>
-        /// <param name="serviceCode">サービスコード</param>
-        /// <param name="address">アドレス</param>
-        /// <returns>データ</returns>
+        /// <param name="serviceCode">サービス コード。</param>
+        /// <param name="address">アドレス。</param>
+        /// <returns>データ。</returns>
         public byte[] ReadWithoutEncryption(int serviceCode, int address)
         {
             return TransferData(() =>
