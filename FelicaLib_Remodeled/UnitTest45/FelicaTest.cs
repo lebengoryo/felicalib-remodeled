@@ -49,9 +49,9 @@ namespace UnitTest45
 
         static object ReadData()
         {
-            using (var felica = new Felica())
+            using (var felica = new Felica(SystemCode))
             {
-                felica.Polling(SystemCode);
+                felica.Polling();
                 var data = felica.ReadWithoutEncryption(ServiceCode, Address);
                 return ToSemanticData(data);
             }

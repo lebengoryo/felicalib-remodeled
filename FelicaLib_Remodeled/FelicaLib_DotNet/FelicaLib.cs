@@ -205,10 +205,19 @@ namespace FelicaLib
         IntPtr felicaPtr;
 
         /// <summary>
+        /// システム コードを取得します。
+        /// </summary>
+        /// <value>システム コード。</value>
+        public int SystemCode { get; private set; }
+
+        /// <summary>
         /// <see cref="Felica"/> クラスの新しいインスタンスを初期化します。
         /// </summary>
-        public Felica()
+        /// <param name="systemCode">システム コード。</param>
+        public Felica(int systemCode)
         {
+            SystemCode = systemCode;
+
             // x64対応 20100501 - DeForest
             // プラットフォーム別のロードモジュール名決定（x64/x86サポート、Iteniumはサポート外）
             dllFileName = IntPtr.Size >= 8 ? "felicalib64.dll" : "felicalib.dll";
@@ -230,6 +239,15 @@ namespace FelicaLib
             {
                 throw new InvalidOperationException("PaSoRi に接続できません。");
             }
+        }
+
+        /// <summary>
+        /// <see cref="Felica"/> クラスの新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="systemCode">システム コード。</param>
+        public Felica(FelicaSystemCode systemCode)
+            : this((int)systemCode)
+        {
         }
 
         #region IDisposable メンバー
@@ -309,21 +327,11 @@ namespace FelicaLib
         /// <summary>
         /// ポーリング
         /// </summary>
-        /// <param name="systemCode">システムコード</param>
-        public void Polling(FelicaSystemCode systemCode)
-        {
-            Polling((int)systemCode);
-        }
-
-        /// <summary>
-        /// ポーリング
-        /// </summary>
-        /// <param name="systemCode">システムコード</param>
-        public void Polling(int systemCode)
+        public void Polling()
         {
             felica_free(felicaPtr);
 
-            felicaPtr = felica_polling(pasoriPtr, (ushort)systemCode, 0, 0);
+            felicaPtr = felica_polling(pasoriPtr, (ushort)SystemCode, 0, 0);
             if (felicaPtr == IntPtr.Zero)
             {
                 throw new InvalidOperationException("IC カードに接続できません。");

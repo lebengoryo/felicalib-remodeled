@@ -20,9 +20,9 @@ namespace ConsoleAppTest45
                     {
                         Console.WriteLine("Start");
 
-                        using (var felica = new Felica())
+                        using (var felica = new Felica(FelicaSystemCode.Edy))
                         {
-                            felica.Polling(FelicaSystemCode.Edy);
+                            felica.Polling();
                         }
                     }
                     catch (Exception ex)
