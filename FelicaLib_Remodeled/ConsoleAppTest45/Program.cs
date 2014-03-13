@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleAppTest45
 {
-    class Program
+    static class Program
     {
         static void Main(string[] args)
         {
@@ -22,7 +22,7 @@ namespace ConsoleAppTest45
 
                         using (var felica = new Felica(FelicaSystemCode.Edy))
                         {
-                            felica.Polling();
+                            Console.WriteLine(felica.IDm().ToHexString());
                         }
                     }
                     catch (Exception ex)
@@ -35,6 +35,11 @@ namespace ConsoleAppTest45
             Thread.Sleep(10000);
             //Console.WriteLine("Press [Enter] key to exit.");
             //Console.ReadLine();
+        }
+
+        public static string ToHexString(this byte[] data)
+        {
+            return string.Concat(data.Select(b => b.ToString("X2")));
         }
     }
 }

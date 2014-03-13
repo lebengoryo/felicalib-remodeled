@@ -27,7 +27,6 @@ namespace UnitTest35
         {
             using (var felica = new Felica(SystemCode))
             {
-                felica.Polling();
                 var data = felica.ReadWithoutEncryption(ServiceCode, Address);
                 return ToSemanticData(data);
             }

@@ -332,18 +332,25 @@ namespace FelicaLib
             isPasoriInitialized = true;
         }
 
-        /// <summary>
-        /// ポーリング
-        /// </summary>
-        public void Polling()
+        TResult TransferData<TResult>(Func<TResult> getData)
         {
             EnsurePasoriConnection();
-            felica_free(felicaPtr);
 
-            felicaPtr = felica_polling(pasoriPtr, (ushort)SystemCode, 0, 0);
-            if (felicaPtr == IntPtr.Zero)
+            try
             {
-                throw new InvalidOperationException("IC カードに接続できません。");
+                if ((felicaPtr = felica_polling(pasoriPtr, (ushort)SystemCode, 0, 0)) == IntPtr.Zero)
+                {
+                    throw new InvalidOperationException("IC カードに接続できません。");
+                }
+                return getData();
+            }
+            finally
+            {
+                if (felicaPtr != IntPtr.Zero)
+                {
+                    felica_free(felicaPtr);
+                    felicaPtr = IntPtr.Zero;
+                }
             }
         }
 
@@ -353,14 +360,12 @@ namespace FelicaLib
         /// <returns>IDmバイナリデータ</returns>
         public byte[] IDm()
         {
-            if (felicaPtr == IntPtr.Zero)
+            return TransferData(() =>
             {
-                throw new InvalidOperationException("ポーリングが開始されていません。");
-            }
-
-            var data = new byte[8];
-            felica_getidm(felicaPtr, data);
-            return data;
+                var data = new byte[8];
+                felica_getidm(felicaPtr, data);
+                return data;
+            });
         }
 
         /// <summary>
@@ -369,14 +374,12 @@ namespace FelicaLib
         /// <returns>PMmバイナリデータ</returns>
         public byte[] PMm()
         {
-            if (felicaPtr == IntPtr.Zero)
+            return TransferData(() =>
             {
-                throw new InvalidOperationException("ポーリングが開始されていません。");
-            }
-
-            var data = new byte[8];
-            felica_getpmm(felicaPtr, data);
-            return data;
+                var data = new byte[8];
+                felica_getpmm(felicaPtr, data);
+                return data;
+            });
         }
 
         /// <summary>
@@ -387,18 +390,16 @@ namespace FelicaLib
         /// <returns>データ</returns>
         public byte[] ReadWithoutEncryption(int serviceCode, int address)
         {
-            if (felicaPtr == IntPtr.Zero)
+            return TransferData(() =>
             {
-                throw new InvalidOperationException("ポーリングが開始されていません。");
-            }
-
-            var data = new byte[16];
-            var result = felica_read_without_encryption02(felicaPtr, serviceCode, 0, (byte)address, data);
-            if (result != 0)
-            {
-                return null;
-            }
-            return data;
+                var data = new byte[16];
+                var result = felica_read_without_encryption02(felicaPtr, serviceCode, 0, (byte)address, data);
+                if (result != 0)
+                {
+                    return null;
+                }
+                return data;
+            });
         }
     }
 }
