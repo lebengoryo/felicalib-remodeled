@@ -204,6 +204,8 @@ namespace FelicaLib
         IntPtr pasoriPtr;
         IntPtr felicaPtr;
 
+        bool isPasoriInitialized;
+
         /// <summary>
         /// システム コードを取得します。
         /// </summary>
@@ -230,14 +232,9 @@ namespace FelicaLib
             {
                 throw new InvalidOperationException(string.Format("{0} をロードできません。", dllFileName), ex);
             }
-
             if ((pasoriPtr = pasori_open(null)) == IntPtr.Zero)
             {
                 throw new InvalidOperationException(string.Format("{0} を開けません。", dllFileName));
-            }
-            if (pasori_init(pasoriPtr) != 0)
-            {
-                throw new InvalidOperationException("PaSoRi に接続できません。");
             }
         }
 
@@ -324,11 +321,23 @@ namespace FelicaLib
 
         #endregion
 
+        void EnsurePasoriConnection()
+        {
+            if (isPasoriInitialized) return;
+
+            if (pasori_init(pasoriPtr) != 0)
+            {
+                throw new InvalidOperationException("PaSoRi に接続できません。");
+            }
+            isPasoriInitialized = true;
+        }
+
         /// <summary>
         /// ポーリング
         /// </summary>
         public void Polling()
         {
+            EnsurePasoriConnection();
             felica_free(felicaPtr);
 
             felicaPtr = felica_polling(pasoriPtr, (ushort)SystemCode, 0, 0);
