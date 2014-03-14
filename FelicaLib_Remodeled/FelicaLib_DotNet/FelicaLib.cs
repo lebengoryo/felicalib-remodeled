@@ -358,7 +358,7 @@ namespace FelicaLib
         /// <summary>
         /// 製造 ID (IDm) を取得します。
         /// </summary>
-        /// <returns>製造 ID (IDm)。</returns>
+        /// <returns>製造 ID (IDm)。配列の長さは 8 です。</returns>
         public byte[] GetIDm()
         {
             return TransferData(() =>
@@ -372,7 +372,7 @@ namespace FelicaLib
         /// <summary>
         /// 製造パラメータ (PMm) を取得します。
         /// </summary>
-        /// <returns>製造パラメータ (PMm)。</returns>
+        /// <returns>製造パラメータ (PMm)。配列の長さは 8 です。</returns>
         public byte[] GetPMm()
         {
             return TransferData(() =>
@@ -388,16 +388,15 @@ namespace FelicaLib
         /// </summary>
         /// <param name="serviceCode">サービス コード。</param>
         /// <param name="address">アドレス。</param>
-        /// <returns>データ。</returns>
+        /// <returns>非暗号化領域のデータ。配列の長さは 16 です。</returns>
         public byte[] ReadWithoutEncryption(int serviceCode, int address)
         {
             return TransferData(() =>
             {
                 var data = new byte[16];
-                var result = felica_read_without_encryption02(felicaPtr, serviceCode, 0, (byte)address, data);
-                if (result != 0)
+                if (felica_read_without_encryption02(felicaPtr, serviceCode, 0, (byte)address, data) != 0)
                 {
-                    return null;
+                    return new byte[16];
                 }
                 return data;
             });
