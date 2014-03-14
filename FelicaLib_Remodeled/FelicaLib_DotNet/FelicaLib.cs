@@ -273,49 +273,64 @@ namespace FelicaLib
         protected virtual void Dispose(bool disposing)
         {
             // 読み込みとは逆の順序でリソースを解放します。
-            if (felicaPtr != IntPtr.Zero)
+            try
             {
-                try
-                {
-                    felica_free(felicaPtr);
-                    felicaPtr = IntPtr.Zero;
-                }
-                catch (Exception ex)
-                {
-                    // 発生したことのある例外:
-                    // System.AccessViolationException
-                    Debug.WriteLine(ex);
-                }
+                CloseFelicaPtr();
+            }
+            catch (Exception ex)
+            {
+                // 発生したことのある例外:
+                // System.AccessViolationException
+                Debug.WriteLine(ex);
             }
 
-            if (pasoriPtr != IntPtr.Zero)
+            try
             {
-                try
-                {
-                    pasori_close(pasoriPtr);
-                    pasoriPtr = IntPtr.Zero;
-                }
-                catch (Exception ex)
-                {
-                    // 発生したことのある例外:
-                    // System.AccessViolationException
-                    Debug.WriteLine(ex);
-                }
+                ClosePasoriPtr();
+            }
+            catch (Exception ex)
+            {
+                // 発生したことのある例外:
+                // System.AccessViolationException
+                Debug.WriteLine(ex);
             }
 
+            try
+            {
+                CloseDllModule();
+            }
+            catch (Exception ex)
+            {
+                // 発生したことのある例外:
+                // System.IO.FileNotFoundException
+                Debug.WriteLine(ex);
+            }
+        }
+
+        void CloseDllModule()
+        {
             if (dllModulePtr != IntPtr.Zero)
             {
-                try
-                {
-                    NativeMethodsHelper.FreeLibrary(dllModulePtr);
-                    dllModulePtr = IntPtr.Zero;
-                }
-                catch (Exception ex)
-                {
-                    // 発生したことのある例外:
-                    // System.IO.FileNotFoundException
-                    Debug.WriteLine(ex);
-                }
+                NativeMethodsHelper.FreeLibrary(dllModulePtr);
+                dllModulePtr = IntPtr.Zero;
+            }
+        }
+
+        void ClosePasoriPtr()
+        {
+            if (pasoriPtr != IntPtr.Zero)
+            {
+                pasori_close(pasoriPtr);
+                pasoriPtr = IntPtr.Zero;
+            }
+        }
+
+        void CloseFelicaPtr()
+        {
+            if (felicaPtr != IntPtr.Zero)
+            {
+                felica_free(felicaPtr);
+                felicaPtr = IntPtr.Zero;
             }
         }
 
@@ -347,11 +362,7 @@ namespace FelicaLib
             }
             finally
             {
-                if (felicaPtr != IntPtr.Zero)
-                {
-                    felica_free(felicaPtr);
-                    felicaPtr = IntPtr.Zero;
-                }
+                CloseFelicaPtr();
             }
         }
 
