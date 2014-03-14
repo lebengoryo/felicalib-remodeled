@@ -204,8 +204,6 @@ namespace FelicaLib
         IntPtr pasoriPtr;
         IntPtr felicaPtr;
 
-        bool isPasoriInitialized;
-
         /// <summary>
         /// システム コードを取得します。
         /// </summary>
@@ -231,10 +229,6 @@ namespace FelicaLib
             catch (Exception ex)
             {
                 throw new InvalidOperationException(string.Format("{0} をロードできません。", dllFileName), ex);
-            }
-            if ((pasoriPtr = pasori_open(null)) == IntPtr.Zero)
-            {
-                throw new InvalidOperationException(string.Format("{0} を開けません。", dllFileName));
             }
         }
 
@@ -336,33 +330,31 @@ namespace FelicaLib
 
         #endregion
 
-        void EnsurePasoriConnection()
+        TResult TransferData<TResult>(Func<TResult> readData)
         {
-            if (isPasoriInitialized) return;
-
-            if (pasori_init(pasoriPtr) != 0)
-            {
-                throw new InvalidOperationException("PaSoRi に接続できません。");
-            }
-            isPasoriInitialized = true;
-        }
-
-        TResult TransferData<TResult>(Func<TResult> getData)
-        {
-            EnsurePasoriConnection();
-
             try
             {
+                if ((pasoriPtr = pasori_open(null)) == IntPtr.Zero)
+                {
+                    throw new InvalidOperationException(string.Format("{0} を開けません。", dllFileName));
+                }
+                if (pasori_init(pasoriPtr) != 0)
+                {
+                    throw new InvalidOperationException("PaSoRi に接続できません。");
+                }
+
                 // felica_polling 関数によるポーリングは、IC カードが範囲内に存在する場合のみ可能です。
                 if ((felicaPtr = felica_polling(pasoriPtr, (ushort)SystemCode, 0, 0)) == IntPtr.Zero)
                 {
                     throw new InvalidOperationException("IC カードに接続できません。");
                 }
-                return getData();
+
+                return readData();
             }
             finally
             {
                 CloseFelicaPtr();
+                ClosePasoriPtr();
             }
         }
 
@@ -409,6 +401,7 @@ namespace FelicaLib
                 {
                     return new byte[16];
                 }
+                // 関数の戻り値が 0 でも、配列の要素がすべて 0 のままであることがあります。
                 return data;
             });
         }
