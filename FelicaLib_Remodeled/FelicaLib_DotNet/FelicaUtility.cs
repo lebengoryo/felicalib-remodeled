@@ -26,6 +26,32 @@ namespace FelicaLib
 
     public static class FelicaUtility
     {
+        public static byte[] GetIDm(int systemCode)
+        {
+            using (var felica = new Felica(systemCode))
+            {
+                return felica.GetIDm();
+            }
+        }
+
+        public static byte[] GetIDm(FelicaSystemCode systemCode)
+        {
+            return GetIDm((int)systemCode);
+        }
+
+        public static byte[] GetPMm(int systemCode)
+        {
+            using (var felica = new Felica(systemCode))
+            {
+                return felica.GetPMm();
+            }
+        }
+
+        public static byte[] GetPMm(FelicaSystemCode systemCode)
+        {
+            return GetPMm((int)systemCode);
+        }
+
         public static int GetEdyBalance()
         {
             using (var felica = new Felica(FelicaSystemCode.Edy))
@@ -70,8 +96,9 @@ namespace FelicaLib
         public static string ToHexString(this byte[] data, bool lowercase = false)
         {
             if (data == null) throw new ArgumentNullException("data");
+            var format = lowercase ? "x2" : "X2";
             return data
-                .Select(b => b.ToString(lowercase ? "x2" : "X2"))
+                .Select(b => b.ToString(format))
                 .ConcatStrings();
         }
 
