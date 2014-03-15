@@ -11,18 +11,11 @@ namespace UnitTest45
     [TestClass]
     public class FelicaTest
     {
-        // Edy 残高
-        const int SystemCode = 0xFE00;
-        const int ServiceCode = 0x1317;
-        const int Address = 0;
-        static readonly Func<byte[], object> ToSemanticData = b => Enumerable.Range(0, 4).Select(i => b[i] * (int)Math.Pow(256, i)).Sum();
-        const int Expected = 12345;
-
         [TestMethod]
         public void ReadWithoutEncryption_1()
         {
-            var target = ReadData();
-            Assert.AreEqual(Expected, target);
+            var target = GetEdyBalance();
+            Assert.AreEqual(12345, target);
         }
 
         [TestMethod]
@@ -35,7 +28,7 @@ namespace UnitTest45
                     try
                     {
                         Console.WriteLine("Start");
-                        Console.WriteLine(ReadData());
+                        ReadEdyBalanceEtc();
                     }
                     catch (Exception ex)
                     {
@@ -47,13 +40,41 @@ namespace UnitTest45
             Thread.Sleep(10000);
         }
 
-        static object ReadData()
+        static int GetEdyBalance()
         {
-            using (var felica = new Felica(SystemCode))
+            using (var felica = new Felica(FelicaSystemCode.Edy))
             {
-                var data = felica.ReadWithoutEncryption(ServiceCode, Address);
-                return ToSemanticData(data);
+                var data = felica.ReadWithoutEncryption(0x1317, 0);
+                return data.ToEdyBalance();
             }
+        }
+
+        static void ReadEdyBalanceEtc()
+        {
+            using (var felica = new Felica(FelicaSystemCode.Edy))
+            {
+                Console.WriteLine(felica.GetIDm().ToHexString());
+                Console.WriteLine(felica.GetPMm().ToHexString());
+
+                var data = felica.ReadWithoutEncryption(0x1317, 0);
+                Console.WriteLine(data.ToEdyBalance());
+            }
+        }
+    }
+
+    public static class FelicaHelper
+    {
+        public static string ToHexString(this byte[] data)
+        {
+            return string.Concat(data.Select(b => b.ToString("X2")));
+        }
+
+        public static int ToEdyBalance(this byte[] data)
+        {
+            return data
+                .Take(4)
+                .Select((b, i) => b * (int)Math.Pow(256, i))
+                .Sum();
         }
     }
 }
