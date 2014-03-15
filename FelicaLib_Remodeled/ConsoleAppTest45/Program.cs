@@ -74,18 +74,5 @@ namespace ConsoleAppTest45
                 }
             }
         }
-
-        public static string ToHexString(this byte[] data)
-        {
-            return string.Concat(data.Select(b => b.ToString("X2")));
-        }
-
-        public static int ToEdyBalance(this byte[] data)
-        {
-            return data
-                .Take(4)
-                .Select((b, i) => b * (int)Math.Pow(256, i))
-                .Sum();
-        }
     }
 }

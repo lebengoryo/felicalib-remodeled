@@ -14,7 +14,7 @@ namespace UnitTest45
         [TestMethod]
         public void ReadWithoutEncryption_1()
         {
-            var target = GetEdyBalance();
+            var target = FelicaUtility.GetEdyBalance();
             Assert.AreEqual(12345, target);
         }
 
@@ -40,15 +40,6 @@ namespace UnitTest45
             Thread.Sleep(10000);
         }
 
-        static int GetEdyBalance()
-        {
-            using (var felica = new Felica(FelicaSystemCode.Edy))
-            {
-                var data = felica.ReadWithoutEncryption(0x1317, 0);
-                return data.ToEdyBalance();
-            }
-        }
-
         static void ReadEdyBalanceEtc()
         {
             using (var felica = new Felica(FelicaSystemCode.Edy))
@@ -59,22 +50,6 @@ namespace UnitTest45
                 var data = felica.ReadWithoutEncryption(0x1317, 0);
                 Console.WriteLine(data.ToEdyBalance());
             }
-        }
-    }
-
-    public static class FelicaHelper
-    {
-        public static string ToHexString(this byte[] data)
-        {
-            return string.Concat(data.Select(b => b.ToString("X2")));
-        }
-
-        public static int ToEdyBalance(this byte[] data)
-        {
-            return data
-                .Take(4)
-                .Select((b, i) => b * (int)Math.Pow(256, i))
-                .Sum();
         }
     }
 }

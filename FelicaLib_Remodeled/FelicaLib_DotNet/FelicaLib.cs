@@ -137,26 +137,6 @@ namespace FelicaLib
     }
 
     /// <summary>
-    /// FeliCa のシステム コードを表します。
-    /// </summary>
-    public enum FelicaSystemCode
-    {
-        /// <summary>すべて。</summary>
-        Any = 0xFFFF,
-        /// <summary>共通領域。</summary>
-        Common = 0xFE00,
-        /// <summary>サイバネ領域。</summary>
-        Cybernetics = 0x0003,
-
-        /// <summary>Edy。共通領域を使用します。</summary>
-        Edy = Common,
-        /// <summary>Suica。サイバネ領域を使用します。</summary>
-        Suica = Cybernetics,
-        /// <summary>QUICPay。</summary>
-        QuicPay = 0x04C1,
-    }
-
-    /// <summary>
     /// FeliCa を通じて IC カードからデータを読み取るためのクラスを表します。
     /// </summary>
     public class Felica : IDisposable
