@@ -12,48 +12,65 @@ namespace ConsoleAppTest45
     {
         static void Main(string[] args)
         {
-            Task.Run(() =>
-            {
-                for (int i = 0; i < 100; i++)
-                {
-                    Console.WriteLine("Start");
-                    ReadEdyBalanceEtc();
-                }
-            });
+            Task.Run(() => Test1());
 
             Thread.Sleep(15000);
             //Console.WriteLine("Press [Enter] key to exit.");
             //Console.ReadLine();
         }
 
-        static void ReadEdyBalanceEtc()
+        static void Test1()
+        {
+            for (int i = 0; i < 1000; i++)
+            {
+                Console.WriteLine("Start");
+
+                using (var felica = new Felica(FelicaSystemCode.Edy))
+                {
+                    try
+                    {
+                        Console.WriteLine(felica.GetIDm().ToHexString());
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                    try
+                    {
+                        Console.WriteLine(felica.GetPMm().ToHexString());
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                    try
+                    {
+                        var data = felica.ReadWithoutEncryption(0x1317, 0);
+                        Console.WriteLine(data.ToEdyBalance());
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                }
+            }
+        }
+
+        static void Test2()
         {
             using (var felica = new Felica(FelicaSystemCode.Edy))
             {
-                try
+                for (int i = 0; i < 1000; i++)
                 {
-                    Console.WriteLine(felica.GetIDm().ToHexString());
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-                try
-                {
-                    Console.WriteLine(felica.GetPMm().ToHexString());
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-                try
-                {
-                    var data = felica.ReadWithoutEncryption(0x1317, 0);
-                    Console.WriteLine(data.ToEdyBalance());
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
+                    try
+                    {
+                        var data = felica.ReadWithoutEncryption(0x1317, 0);
+                        Console.WriteLine(data.ToEdyBalance());
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
                 }
             }
         }
