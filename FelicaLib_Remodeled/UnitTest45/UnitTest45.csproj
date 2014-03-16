@@ -53,6 +53,7 @@
     <Compile Include="FelicaTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FelicaUtilityTest.cs" />
+    <Compile Include="FelicaHelperTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FelicaLib_DotNet\FelicaLib_DotNet.csproj">
