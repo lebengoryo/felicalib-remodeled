@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FelicaHelper.cs" />
     <Compile Include="FelicaLib.cs" />
     <Compile Include="FelicaUtility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
