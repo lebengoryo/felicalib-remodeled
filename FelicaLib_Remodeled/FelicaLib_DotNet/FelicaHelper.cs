@@ -111,9 +111,19 @@ namespace FelicaLib
         /// バイト配列を 16 進数表記の文字列に変換します。
         /// </summary>
         /// <param name="data">バイト配列。</param>
+        /// <returns>16 進数表記の文字列。</returns>
+        public static string ToHexString(this byte[] data)
+        {
+            return ToHexString(data, false);
+        }
+
+        /// <summary>
+        /// バイト配列を 16 進数表記の文字列に変換します。
+        /// </summary>
+        /// <param name="data">バイト配列。</param>
         /// <param name="lowercase">アルファベットを小文字で表記する場合は <see langword="true"/>。</param>
         /// <returns>16 進数表記の文字列。</returns>
-        public static string ToHexString(this byte[] data, bool lowercase = false)
+        public static string ToHexString(this byte[] data, bool lowercase)
         {
             if (data == null) throw new ArgumentNullException("data");
 
