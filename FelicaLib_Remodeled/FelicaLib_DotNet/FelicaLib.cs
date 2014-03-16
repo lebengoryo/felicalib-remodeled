@@ -137,26 +137,6 @@ namespace FelicaLib
     }
 
     /// <summary>
-    /// FeliCa のシステム コードを表します。
-    /// </summary>
-    public enum FelicaSystemCode
-    {
-        /// <summary>すべて。</summary>
-        Any = 0xFFFF,
-        /// <summary>共通領域。</summary>
-        Common = 0xFE00,
-        /// <summary>サイバネ領域。</summary>
-        Cybernetics = 0x0003,
-
-        /// <summary>Edy。共通領域を使用します。</summary>
-        Edy = Common,
-        /// <summary>Suica。サイバネ領域を使用します。</summary>
-        Suica = Cybernetics,
-        /// <summary>QUICPay。</summary>
-        QuicPay = 0x04C1,
-    }
-
-    /// <summary>
     /// FeliCa を通じて IC カードからデータを読み取るためのクラスを表します。
     /// </summary>
     public class Felica : IDisposable
@@ -205,10 +185,19 @@ namespace FelicaLib
         IntPtr felicaPtr;
 
         /// <summary>
+        /// システム コードを取得します。
+        /// </summary>
+        /// <value>システム コード。</value>
+        public int SystemCode { get; private set; }
+
+        /// <summary>
         /// <see cref="Felica"/> クラスの新しいインスタンスを初期化します。
         /// </summary>
-        public Felica()
+        /// <param name="systemCode">システム コード。</param>
+        public Felica(int systemCode)
         {
+            SystemCode = systemCode;
+
             // x64対応 20100501 - DeForest
             // プラットフォーム別のロードモジュール名決定（x64/x86サポート、Iteniumはサポート外）
             dllFileName = IntPtr.Size >= 8 ? "felicalib64.dll" : "felicalib.dll";
@@ -221,15 +210,15 @@ namespace FelicaLib
             {
                 throw new InvalidOperationException(string.Format("{0} をロードできません。", dllFileName), ex);
             }
+        }
 
-            if ((pasoriPtr = pasori_open(null)) == IntPtr.Zero)
-            {
-                throw new InvalidOperationException(string.Format("{0} を開けません。", dllFileName));
-            }
-            if (pasori_init(pasoriPtr) != 0)
-            {
-                throw new InvalidOperationException("PaSoRi に接続できません。");
-            }
+        /// <summary>
+        /// <see cref="Felica"/> クラスの新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="systemCode">システム コード。</param>
+        public Felica(FelicaSystemCode systemCode)
+            : this((int)systemCode)
+        {
         }
 
         #region IDisposable メンバー
@@ -258,130 +247,143 @@ namespace FelicaLib
         protected virtual void Dispose(bool disposing)
         {
             // 読み込みとは逆の順序でリソースを解放します。
-            if (felicaPtr != IntPtr.Zero)
+            try
             {
-                try
-                {
-                    felica_free(felicaPtr);
-                    felicaPtr = IntPtr.Zero;
-                }
-                catch (Exception ex)
-                {
-                    // 発生したことのある例外:
-                    // System.AccessViolationException
-                    Debug.WriteLine(ex);
-                }
+                CloseFelicaPtr();
+            }
+            catch (Exception ex)
+            {
+                // 発生したことのある例外:
+                // System.AccessViolationException
+                Debug.WriteLine(ex);
             }
 
-            if (pasoriPtr != IntPtr.Zero)
+            try
             {
-                try
-                {
-                    pasori_close(pasoriPtr);
-                    pasoriPtr = IntPtr.Zero;
-                }
-                catch (Exception ex)
-                {
-                    // 発生したことのある例外:
-                    // System.AccessViolationException
-                    Debug.WriteLine(ex);
-                }
+                ClosePasoriPtr();
+            }
+            catch (Exception ex)
+            {
+                // 発生したことのある例外:
+                // System.AccessViolationException
+                Debug.WriteLine(ex);
             }
 
+            try
+            {
+                CloseDllModule();
+            }
+            catch (Exception ex)
+            {
+                // 発生したことのある例外:
+                // System.IO.FileNotFoundException
+                Debug.WriteLine(ex);
+            }
+        }
+
+        void CloseDllModule()
+        {
             if (dllModulePtr != IntPtr.Zero)
             {
-                try
-                {
-                    NativeMethodsHelper.FreeLibrary(dllModulePtr);
-                    dllModulePtr = IntPtr.Zero;
-                }
-                catch (Exception ex)
-                {
-                    // 発生したことのある例外:
-                    // System.IO.FileNotFoundException
-                    Debug.WriteLine(ex);
-                }
+                NativeMethodsHelper.FreeLibrary(dllModulePtr);
+                dllModulePtr = IntPtr.Zero;
+            }
+        }
+
+        void ClosePasoriPtr()
+        {
+            if (pasoriPtr != IntPtr.Zero)
+            {
+                pasori_close(pasoriPtr);
+                pasoriPtr = IntPtr.Zero;
+            }
+        }
+
+        void CloseFelicaPtr()
+        {
+            if (felicaPtr != IntPtr.Zero)
+            {
+                felica_free(felicaPtr);
+                felicaPtr = IntPtr.Zero;
             }
         }
 
         #endregion
 
-        /// <summary>
-        /// ポーリング
-        /// </summary>
-        /// <param name="systemCode">システムコード</param>
-        public void Polling(FelicaSystemCode systemCode)
+        TResult TransferData<TResult>(Func<TResult> readData)
         {
-            Polling((int)systemCode);
-        }
-
-        /// <summary>
-        /// ポーリング
-        /// </summary>
-        /// <param name="systemCode">システムコード</param>
-        public void Polling(int systemCode)
-        {
-            felica_free(felicaPtr);
-
-            felicaPtr = felica_polling(pasoriPtr, (ushort)systemCode, 0, 0);
-            if (felicaPtr == IntPtr.Zero)
+            try
             {
-                throw new InvalidOperationException("IC カードに接続できません。");
+                if ((pasoriPtr = pasori_open(null)) == IntPtr.Zero)
+                {
+                    throw new InvalidOperationException(string.Format("{0} を開けません。", dllFileName));
+                }
+                if (pasori_init(pasoriPtr) != 0)
+                {
+                    throw new InvalidOperationException("PaSoRi に接続できません。");
+                }
+
+                // felica_polling 関数によるポーリングは、IC カードが範囲内に存在する場合のみ可能です。
+                if ((felicaPtr = felica_polling(pasoriPtr, (ushort)SystemCode, 0, 0)) == IntPtr.Zero)
+                {
+                    throw new InvalidOperationException("IC カードが見つかりません。または、システム コードが一致しません。");
+                }
+
+                return readData();
+            }
+            finally
+            {
+                CloseFelicaPtr();
+                ClosePasoriPtr();
             }
         }
 
         /// <summary>
-        /// IDm取得
+        /// 製造 ID (IDm) を取得します。
         /// </summary>
-        /// <returns>IDmバイナリデータ</returns>
-        public byte[] IDm()
+        /// <returns>製造 ID (IDm)。配列の長さは 8 です。</returns>
+        public byte[] GetIDm()
         {
-            if (felicaPtr == IntPtr.Zero)
+            return TransferData(() =>
             {
-                throw new InvalidOperationException("ポーリングが開始されていません。");
-            }
-
-            var data = new byte[8];
-            felica_getidm(felicaPtr, data);
-            return data;
+                var data = new byte[8];
+                felica_getidm(felicaPtr, data);
+                return data;
+            });
         }
 
         /// <summary>
-        /// PMm取得
+        /// 製造パラメータ (PMm) を取得します。
         /// </summary>
-        /// <returns>PMmバイナリデータ</returns>
-        public byte[] PMm()
+        /// <returns>製造パラメータ (PMm)。配列の長さは 8 です。</returns>
+        public byte[] GetPMm()
         {
-            if (felicaPtr == IntPtr.Zero)
+            return TransferData(() =>
             {
-                throw new InvalidOperationException("ポーリングが開始されていません。");
-            }
-
-            var data = new byte[8];
-            felica_getpmm(felicaPtr, data);
-            return data;
+                var data = new byte[8];
+                felica_getpmm(felicaPtr, data);
+                return data;
+            });
         }
 
         /// <summary>
-        /// 非暗号化領域読み込み
+        /// 非暗号化領域のデータを読み込みます。
         /// </summary>
-        /// <param name="serviceCode">サービスコード</param>
-        /// <param name="address">アドレス</param>
-        /// <returns>データ</returns>
+        /// <param name="serviceCode">サービス コード。</param>
+        /// <param name="address">アドレス。</param>
+        /// <returns>非暗号化領域のデータ。配列の長さは 16 です。</returns>
         public byte[] ReadWithoutEncryption(int serviceCode, int address)
         {
-            if (felicaPtr == IntPtr.Zero)
+            return TransferData(() =>
             {
-                throw new InvalidOperationException("ポーリングが開始されていません。");
-            }
-
-            var data = new byte[16];
-            var result = felica_read_without_encryption02(felicaPtr, serviceCode, 0, (byte)address, data);
-            if (result != 0)
-            {
-                return null;
-            }
-            return data;
+                var data = new byte[16];
+                if (felica_read_without_encryption02(felicaPtr, serviceCode, 0, (byte)address, data) != 0)
+                {
+                    throw new InvalidOperationException("指定されたサービス コードおよびアドレスのデータが存在しません。");
+                }
+                // 関数の戻り値が 0 でも、配列の要素がすべて 0 のままであることがあります。
+                return data;
+            });
         }
     }
 }
