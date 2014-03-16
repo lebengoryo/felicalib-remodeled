@@ -43,6 +43,13 @@ namespace UnitTest45
         }
 
         [TestMethod]
+        public void GetWaonBalance_1()
+        {
+            var target = FelicaUtility.GetWaonBalance();
+            Assert.AreEqual(12345, target);
+        }
+
+        [TestMethod]
         public void GetSuicaBalance_1()
         {
             var target = FelicaUtility.GetSuicaBalance();

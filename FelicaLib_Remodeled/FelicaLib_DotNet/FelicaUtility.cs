@@ -18,6 +18,8 @@ namespace FelicaLib
 
         /// <summary>Edy。共通領域を使用します。</summary>
         Edy = Common,
+        /// <summary>WAON。共通領域を使用します。</summary>
+        Waon = Common,
         /// <summary>Suica。サイバネ領域を使用します。</summary>
         Suica = Cybernetics,
         /// <summary>QUICPay。</summary>
@@ -89,6 +91,19 @@ namespace FelicaLib
         }
 
         /// <summary>
+        /// WAON の残高を取得します。
+        /// </summary>
+        /// <returns>WAON の残高。</returns>
+        public static int GetWaonBalance()
+        {
+            using (var felica = new Felica(FelicaSystemCode.Waon))
+            {
+                var data = felica.ReadWithoutEncryption(0x6817, 0);
+                return data.ToWaonBalance();
+            }
+        }
+
+        /// <summary>
         /// Suica の残高を取得します。PASMO などの交通系 IC カードと互換性があります。
         /// </summary>
         /// <returns>Suica の残高。</returns>
@@ -119,6 +134,21 @@ namespace FelicaLib
 
             return data
                 .Take(4)
+                .Select((b, i) => b * (int)Math.Pow(256, i))
+                .Sum();
+        }
+
+        /// <summary>
+        /// バイト配列を WAON の残高に変換します。
+        /// </summary>
+        /// <param name="data">バイト配列。</param>
+        /// <returns>WAON の残高。</returns>
+        public static int ToWaonBalance(this byte[] data)
+        {
+            if (data == null) throw new ArgumentNullException("data");
+
+            return data
+                .Take(2)
                 .Select((b, i) => b * (int)Math.Pow(256, i))
                 .Sum();
         }
