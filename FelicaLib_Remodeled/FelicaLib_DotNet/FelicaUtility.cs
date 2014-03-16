@@ -29,6 +29,11 @@ namespace FelicaLib
     /// </summary>
     public static class FelicaUtility
     {
+        /// <summary>
+        /// 製造 ID (IDm) を取得します。
+        /// </summary>
+        /// <param name="systemCode">システム コード。</param>
+        /// <returns>製造 ID (IDm)。配列の長さは 8 です。</returns>
         public static byte[] GetIDm(int systemCode)
         {
             using (var felica = new Felica(systemCode))
@@ -37,11 +42,21 @@ namespace FelicaLib
             }
         }
 
+        /// <summary>
+        /// 製造 ID (IDm) を取得します。
+        /// </summary>
+        /// <param name="systemCode">システム コード。</param>
+        /// <returns>製造 ID (IDm)。配列の長さは 8 です。</returns>
         public static byte[] GetIDm(FelicaSystemCode systemCode)
         {
             return GetIDm((int)systemCode);
         }
 
+        /// <summary>
+        /// 製造パラメータ (PMm) を取得します。
+        /// </summary>
+        /// <param name="systemCode">システム コード。</param>
+        /// <returns>製造パラメータ (PMm)。配列の長さは 8 です。</returns>
         public static byte[] GetPMm(int systemCode)
         {
             using (var felica = new Felica(systemCode))
@@ -50,11 +65,20 @@ namespace FelicaLib
             }
         }
 
+        /// <summary>
+        /// 製造パラメータ (PMm) を取得します。
+        /// </summary>
+        /// <param name="systemCode">システム コード。</param>
+        /// <returns>製造パラメータ (PMm)。配列の長さは 8 です。</returns>
         public static byte[] GetPMm(FelicaSystemCode systemCode)
         {
             return GetPMm((int)systemCode);
         }
 
+        /// <summary>
+        /// Edy の残高を取得します。
+        /// </summary>
+        /// <returns>Edy の残高。</returns>
         public static int GetEdyBalance()
         {
             using (var felica = new Felica(FelicaSystemCode.Edy))
@@ -64,6 +88,10 @@ namespace FelicaLib
             }
         }
 
+        /// <summary>
+        /// Suica の残高を取得します。PASMO などの交通系 IC カードと互換性があります。
+        /// </summary>
+        /// <returns>Suica の残高。</returns>
         public static int GetSuicaBalance()
         {
             using (var felica = new Felica(FelicaSystemCode.Suica))
@@ -76,7 +104,7 @@ namespace FelicaLib
     }
 
     /// <summary>
-    /// Felica に関するヘルパー メソッドを提供します。
+    /// FeliCa に関するヘルパー メソッドを提供します。
     /// </summary>
     public static class FelicaHelper
     {
@@ -96,10 +124,10 @@ namespace FelicaLib
         }
 
         /// <summary>
-        /// バイト配列を Suica などの交通系 IC カードの残高に変換します。
+        /// バイト配列を Suica の残高に変換します。PASMO などの交通系 IC カードと互換性があります。
         /// </summary>
         /// <param name="data">バイト配列。</param>
-        /// <returns>Suica などの交通系 IC カードの残高。</returns>
+        /// <returns>Suica の残高。</returns>
         public static int ToSuicaBalance(this byte[] data)
         {
             if (data == null) throw new ArgumentNullException("data");
