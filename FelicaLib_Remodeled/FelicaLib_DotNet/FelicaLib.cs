@@ -326,7 +326,7 @@ namespace FelicaLib
                 // felica_polling 関数によるポーリングは、IC カードが範囲内に存在する場合のみ可能です。
                 if ((felicaPtr = felica_polling(pasoriPtr, (ushort)SystemCode, 0, 0)) == IntPtr.Zero)
                 {
-                    throw new InvalidOperationException("IC カードに接続できません。");
+                    throw new InvalidOperationException("IC カードが見つかりません。または、システム コードが一致しません。");
                 }
 
                 return readData();
