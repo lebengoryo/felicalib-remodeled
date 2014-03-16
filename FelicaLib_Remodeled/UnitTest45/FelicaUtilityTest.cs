@@ -38,21 +38,21 @@ namespace UnitTest45
         [TestMethod]
         public void GetEdyBalance_1()
         {
-            var target = FelicaUtility.GetEdyBalance();
+            var target = FelicaHelper.GetEdyBalance();
             Assert.AreEqual(12345, target);
         }
 
         [TestMethod]
         public void GetWaonBalance_1()
         {
-            var target = FelicaUtility.GetWaonBalance();
+            var target = FelicaHelper.GetWaonBalance();
             Assert.AreEqual(12345, target);
         }
 
         [TestMethod]
         public void GetSuicaBalance_1()
         {
-            var target = FelicaUtility.GetSuicaBalance();
+            var target = FelicaHelper.GetSuicaBalance();
             Assert.AreEqual(12345, target);
         }
     }
