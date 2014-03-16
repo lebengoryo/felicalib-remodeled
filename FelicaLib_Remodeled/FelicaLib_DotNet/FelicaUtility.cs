@@ -111,8 +111,7 @@ namespace FelicaLib
         {
             using (var felica = new Felica(FelicaSystemCode.Suica))
             {
-                // 20 件の利用履歴が保存されており、address の値の範囲は 0 ～ 19 です。
-                var data = felica.ReadWithoutEncryption(0x090F, 0);
+                var data = felica.ReadWithoutEncryption(0x008B, 0);
                 return data.ToSuicaBalance();
             }
         }
@@ -163,7 +162,7 @@ namespace FelicaLib
             if (data == null) throw new ArgumentNullException("data");
 
             return data
-                .Skip(10)
+                .Skip(11)
                 .Take(2)
                 .Select((b, i) => b * (int)Math.Pow(256, i))
                 .Sum();
