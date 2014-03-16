@@ -379,7 +379,7 @@ namespace FelicaLib
                 var data = new byte[16];
                 if (felica_read_without_encryption02(felicaPtr, serviceCode, 0, (byte)address, data) != 0)
                 {
-                    return new byte[16];
+                    throw new InvalidOperationException("指定されたサービス コードまたはアドレスにデータが存在しません。");
                 }
                 // 関数の戻り値が 0 でも、配列の要素がすべて 0 のままであることがあります。
                 return data;
