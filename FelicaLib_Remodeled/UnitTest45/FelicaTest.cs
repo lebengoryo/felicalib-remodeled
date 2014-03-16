@@ -41,7 +41,32 @@ namespace UnitTest45
         }
 
         [TestMethod]
-        public void ReadWithoutEncryption_ManyTimes()
+        public void ReadWithoutEncryption_ManyTimes1()
+        {
+            Task.Run(() =>
+            {
+                using (var felica = new Felica(FelicaSystemCode.Edy))
+                {
+                    for (int i = 0; i < 100; i++)
+                    {
+                        try
+                        {
+                            var data = felica.ReadWithoutEncryption(0x1317, 0);
+                            Console.WriteLine(data.ToEdyBalance());
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.Message);
+                        }
+                    }
+                }
+            });
+
+            Thread.Sleep(10000);
+        }
+
+        [TestMethod]
+        public void ReadWithoutEncryption_ManyTimes2()
         {
             Task.Run(() =>
             {
