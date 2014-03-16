@@ -62,9 +62,9 @@ namespace FelicaLib
         }
 
         /// <summary>
-        /// バイト配列を Edy の残高に変換します。
+        /// Edy の残高情報のバイナリ データを残高に変換します。
         /// </summary>
-        /// <param name="data">バイト配列。</param>
+        /// <param name="data">バイナリ データ。</param>
         /// <returns>Edy の残高。</returns>
         public static int ToEdyBalance(this byte[] data)
         {
@@ -77,9 +77,9 @@ namespace FelicaLib
         }
 
         /// <summary>
-        /// バイト配列を WAON の残高に変換します。
+        /// WAON の残高情報のバイナリ データを残高に変換します。
         /// </summary>
-        /// <param name="data">バイト配列。</param>
+        /// <param name="data">バイナリ データ。</param>
         /// <returns>WAON の残高。</returns>
         public static int ToWaonBalance(this byte[] data)
         {
@@ -92,9 +92,9 @@ namespace FelicaLib
         }
 
         /// <summary>
-        /// バイト配列を Suica の残高に変換します。PASMO などの交通系 IC カードと互換性があります。
+        /// Suica の属性情報のバイナリ データを残高に変換します。PASMO などの交通系 IC カードと互換性があります。
         /// </summary>
-        /// <param name="data">バイト配列。</param>
+        /// <param name="data">バイナリ データ。</param>
         /// <returns>Suica の残高。</returns>
         public static int ToSuicaBalance(this byte[] data)
         {
