@@ -12,6 +12,13 @@ namespace ConsoleAppTest45
     {
         static void Main(string[] args)
         {
+            AppDomain.CurrentDomain.UnhandledException += (o, e) =>
+            {
+                Console.WriteLine(e.ExceptionObject);
+                Console.WriteLine("Press [Enter] key to exit.");
+                Console.ReadLine();
+            };
+
             Task.Run(() => Test1());
 
             Thread.Sleep(15000);
