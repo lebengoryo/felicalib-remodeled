@@ -16,6 +16,19 @@ Install-Package FelicaLib.DotNet
 
 ![VS-NuGet](Images/Preview/VS-NuGet.png)
 
+### Usage
+FelicaLib 名前空間を追加します。
+
+```c#
+using FelicaLib;
+```
+
+Edy の残高を取得するなどの一部の用途に対しては、ヘルパー メソッドが用意されています。
+
+```c#
+int balance = FelicaHelper.GetEdyBalance();
+```
+
 ### Testing environment
 * [PaSoRi RC-S380](http://www.sony.co.jp/Products/felica/consumer/products/RC-S380.html)
 * Windows 8
