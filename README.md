@@ -4,17 +4,22 @@ felicalib 改 (felicalib Remodeled) is a FeliCa access wrapper library for .NET,
 
 ### Setup
 felicalib 改は、[NuGet Gallery](http://www.nuget.org/packages/FelicaLib.DotNet/) に登録されています。  
-felicalib 改を利用するには、次のいずれかの方法で NuGet パッケージをインストールします。
+felicalib 改を利用するには、次の方法で NuGet パッケージをインストールします。
 
-* Visual Studio の [パッケージ マネージャー コンソール] で、次のコマンドを実行します。
+(方法 1) Visual Studio の [パッケージ マネージャー コンソール] で、次のコマンドを実行します。
 
 ```
 Install-Package FelicaLib.DotNet
 ```
 
-* Visual Studio でプロジェクトを右クリックして、[Nuget パッケージの管理] で「felicalib Remodeled」を検索してインストールします。「felica」と入力すれば見つかります。
+(方法 2) Visual Studio でプロジェクトを右クリックして、[Nuget パッケージの管理] で「felicalib Remodeled」を検索してインストールします。「felica」と入力すれば見つかります。
 
 ![VS-NuGet](Images/Preview/VS-NuGet.png)
+
+### Testing environment
+* [PaSoRi RC-S380](http://www.sony.co.jp/Products/felica/consumer/products/RC-S380.html)
+* Windows 8
+* .NET Framework 3.5, 4.5
 
 ### Release notes
 * **v1.1.0** NuGet に登録しました (この時点でソースコードは変更していません)。
