@@ -1,15 +1,20 @@
 ## felicalib 改
 
-felicalib 改 (felicalib Remodeled) is the FeliCa access wrapper library for .NET, forked from [tmurakam/felicalib](https://github.com/tmurakam/felicalib).
+felicalib 改 (felicalib Remodeled) is a FeliCa access wrapper library for .NET, forked from [tmurakam/felicalib](https://github.com/tmurakam/felicalib).
 
 ### Setup
-To install felicalib Remodeled, run the following command in the Package Manager Console on Visual Studio:
+felicalib 改は、[NuGet Gallery](http://www.nuget.org/packages/FelicaLib.DotNet/) に登録されています。  
+felicalib 改を利用するには、次のいずれかの方法で NuGet パッケージをインストールします。
+
+* Visual Studio の [パッケージ マネージャー コンソール] で、次のコマンドを実行します。
 
 ```
 Install-Package FelicaLib.DotNet
 ```
 
-[NuGet Gallery | felicalib Remodeled](https://www.nuget.org/packages/FelicaLib.DotNet/)
+* Visual Studio でプロジェクトを右クリックして、[Nuget パッケージの管理] で「felicalib Remodeled」を検索してインストールします。「felica」と入力すれば見つかります。
+
+![VS-NuGet](Images/Preview/VS-NuGet.png)
 
 ### Release notes
 * **v1.1.0** NuGet に登録しました (この時点でソースコードは変更していません)。
