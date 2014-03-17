@@ -17,16 +17,23 @@ Install-Package FelicaLib.DotNet
 ![VS-NuGet](Images/Preview/VS-NuGet.png)
 
 ### Usage
-FelicaLib 名前空間を追加します。
+まず、FelicaLib 名前空間を追加します。
 
 ```c#
 using FelicaLib;
 ```
 
-Edy の残高を取得するなどの一部の用途に対しては、ヘルパー メソッドが用意されています。
+Edy の残高を取得するなどの一部の特殊な用途に対しては、ヘルパー メソッドが用意されています。
 
 ```c#
 int balance = FelicaHelper.GetEdyBalance();
+```
+
+システム コード、サービス コードおよびアドレスを指定して、非暗号化領域のデータを取得します。
+
+```c#
+byte[] data = FelicaUtility.ReadWithoutEncryption(FelicaSystemCode.Edy, 0x1317, 0);
+int balance = data.ToEdyBalance();
 ```
 
 ### Testing environment
