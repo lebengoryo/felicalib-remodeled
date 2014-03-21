@@ -7,9 +7,8 @@ using System.Runtime.InteropServices;
 // アセンブリに関連付けられている情報を変更するには、
 // これらの属性値を変更してください。
 [assembly: AssemblyTitle("felicalib Remodeled")]
-[assembly: AssemblyDescription(@"FeliCa access wrapper library.
-「felicalib 改」です。
-プロジェクトに追加された felicalib.dll のプロパティを開き、[出力ディレクトリにコピー] を [新しい場合はコピーする] に設定してください。")]
+[assembly: AssemblyDescription(@"「felicalib 改」です。
+A FeliCa access wrapper library for .NET.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Keiho Sakapon")]
 [assembly: AssemblyProduct("felicalib")]
@@ -35,7 +34,7 @@ using System.Runtime.InteropServices;
 // すべての値を指定するか、下のように '*' を使ってビルドおよびリビジョン番号を 
 // 既定値にすることができます:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.2.48.0")]
-[assembly: AssemblyFileVersion("1.2.48.0")]
+[assembly: AssemblyVersion("1.2.49.0")]
+[assembly: AssemblyFileVersion("1.2.49.0")]
 
 [assembly: CLSCompliant(true)]
