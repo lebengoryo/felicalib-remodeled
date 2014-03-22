@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
-namespace UnitTest45.Scenarios
+namespace UnitTest.Scenarios
 {
     /// <summary>
     /// FeliCa ポートが接続されていない場合のテストです。
