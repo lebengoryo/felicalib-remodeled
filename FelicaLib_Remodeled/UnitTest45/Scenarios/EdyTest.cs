@@ -97,6 +97,16 @@ namespace UnitTest.Scenarios
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
+        public void Felica_ReadWithoutEncryption_Waon()
+        {
+            using (var felica = new Felica(FelicaSystemCode.Waon))
+            {
+                Debug.WriteLine(felica.ReadWithoutEncryption(0x6817, 0).ToWaonBalance());
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
         public void Felica_ReadWithoutEncryption_Suica()
         {
             using (var felica = new Felica(FelicaSystemCode.Suica))
@@ -140,9 +150,30 @@ namespace UnitTest.Scenarios
         }
 
         [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void FelicaUtility_ReadWithoutEncryption_Waon()
+        {
+            Debug.WriteLine(FelicaUtility.ReadWithoutEncryption(FelicaSystemCode.Waon, 0x6817, 0).ToWaonBalance());
+        }
+
+        [TestMethod]
         public void FelicaHelper_GetEdyBalance()
         {
             Debug.WriteLine(FelicaHelper.GetEdyBalance());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void FelicaHelper_GetWaonBalance()
+        {
+            Debug.WriteLine(FelicaHelper.GetWaonBalance());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void FelicaHelper_GetSuicaBalance()
+        {
+            Debug.WriteLine(FelicaHelper.GetSuicaBalance());
         }
     }
 }

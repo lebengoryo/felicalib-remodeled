@@ -1,6 +1,7 @@
 ﻿using FelicaLib;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Diagnostics;
 
 namespace UnitTest.Scenarios
 {
@@ -15,7 +16,7 @@ namespace UnitTest.Scenarios
         {
             using (var felica = new Felica(FelicaSystemCode.Any))
             {
-                Assert.IsFalse(felica.TryConnectionToPort());
+                Assert.AreEqual(false, felica.TryConnectionToPort());
             }
         }
 
@@ -24,7 +25,7 @@ namespace UnitTest.Scenarios
         {
             using (var felica = new Felica(FelicaSystemCode.Any))
             {
-                Assert.IsFalse(felica.TryConnectionToCard());
+                Assert.AreEqual(false, felica.TryConnectionToCard());
             }
         }
 
@@ -34,34 +35,46 @@ namespace UnitTest.Scenarios
         {
             using (var felica = new Felica(FelicaSystemCode.Any))
             {
-                felica.GetIDm();
+                Debug.WriteLine(felica.GetIDm().ToHexString());
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void Felica_ReadWithoutEncryption()
+        {
+            using (var felica = new Felica(FelicaSystemCode.Edy))
+            {
+                Debug.WriteLine(felica.ReadWithoutEncryption(0x1317, 0).ToEdyBalance());
             }
         }
 
         [TestMethod]
         public void FelicaUtility_TryConnectionToPort()
         {
-            Assert.IsFalse(FelicaUtility.TryConnectionToPort());
+            Assert.AreEqual(false, FelicaUtility.TryConnectionToPort());
         }
 
         [TestMethod]
         public void FelicaUtility_TryConnectionToCard()
         {
-            Assert.IsFalse(FelicaUtility.TryConnectionToCard(FelicaSystemCode.Any));
+            Assert.AreEqual(false, FelicaUtility.TryConnectionToCard(FelicaSystemCode.Any));
+            Assert.AreEqual(false, FelicaUtility.TryConnectionToCard(FelicaSystemCode.Edy));
+            Assert.AreEqual(false, FelicaUtility.TryConnectionToCard(FelicaSystemCode.Suica));
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
         public void FelicaUtility_GetIDm()
         {
-            FelicaUtility.GetIDm(FelicaSystemCode.Any);
+            Debug.WriteLine(FelicaUtility.GetIDm(FelicaSystemCode.Any).ToHexString());
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
         public void FelicaHelper_GetEdyBalance()
         {
-            FelicaHelper.GetEdyBalance();
+            Debug.WriteLine(FelicaHelper.GetEdyBalance());
         }
     }
 }
