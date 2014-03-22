@@ -8,6 +8,27 @@ namespace UnitTest35
     public class FelicaUtilityTest
     {
         [TestMethod]
+        public void TryConnectionToPort_1()
+        {
+            var actual = FelicaUtility.TryConnectionToPort();
+            Assert.IsTrue(actual);
+        }
+
+        [TestMethod]
+        public void TryConnectionToCard_1()
+        {
+            var actual = FelicaUtility.TryConnectionToCard(0xFE00);
+            Assert.IsTrue(actual);
+        }
+
+        [TestMethod]
+        public void TryConnectionToCard_2()
+        {
+            var actual = FelicaUtility.TryConnectionToCard(FelicaSystemCode.Edy);
+            Assert.IsTrue(actual);
+        }
+
+        [TestMethod]
         public void GetIDm_1()
         {
             var actual = FelicaUtility.GetIDm(0xFE00);

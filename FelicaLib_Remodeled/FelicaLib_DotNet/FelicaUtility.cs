@@ -10,6 +10,41 @@ namespace FelicaLib
     public static class FelicaUtility
     {
         /// <summary>
+        /// FeliCa ポートに接続できるかどうかを確認します。
+        /// </summary>
+        /// <returns>FeliCa ポートに接続できる場合は <see langword="true"/>。</returns>
+        public static bool TryConnectionToPort()
+        {
+            using (var felica = new Felica(FelicaSystemCode.Any))
+            {
+                return felica.TryConnectionToPort();
+            }
+        }
+
+        /// <summary>
+        /// IC カードに接続できるかどうかを確認します。
+        /// </summary>
+        /// <param name="systemCode">システム コード。</param>
+        /// <returns>IC カードに接続できる場合は <see langword="true"/>。</returns>
+        public static bool TryConnectionToCard(int systemCode)
+        {
+            using (var felica = new Felica(systemCode))
+            {
+                return felica.TryConnectionToCard();
+            }
+        }
+
+        /// <summary>
+        /// IC カードに接続できるかどうかを確認します。
+        /// </summary>
+        /// <param name="systemCode">システム コード。</param>
+        /// <returns>IC カードに接続できる場合は <see langword="true"/>。</returns>
+        public static bool TryConnectionToCard(FelicaSystemCode systemCode)
+        {
+            return TryConnectionToCard((int)systemCode);
+        }
+
+        /// <summary>
         /// 製造 ID (IDm) を取得します。
         /// </summary>
         /// <param name="systemCode">システム コード。</param>
