@@ -310,6 +310,44 @@ namespace FelicaLib
 
         #endregion
 
+        /// <summary>
+        /// FeliCa ポートに接続できるかどうかを確認します。
+        /// </summary>
+        /// <returns>FeliCa ポートに接続できる場合は <see langword="true"/>。</returns>
+        public bool TryConnectionToPort()
+        {
+            try
+            {
+                return
+                    (pasoriPtr = pasori_open(null)) != IntPtr.Zero &&
+                    pasori_init(pasoriPtr) == 0;
+            }
+            finally
+            {
+                ClosePasoriPtr();
+            }
+        }
+
+        /// <summary>
+        /// IC カードに接続できるかどうかを確認します。
+        /// </summary>
+        /// <returns>IC カードに接続できる場合は <see langword="true"/>。</returns>
+        public bool TryConnectionToCard()
+        {
+            try
+            {
+                return
+                    (pasoriPtr = pasori_open(null)) != IntPtr.Zero &&
+                    pasori_init(pasoriPtr) == 0 &&
+                    (felicaPtr = felica_polling(pasoriPtr, (ushort)SystemCode, 0, 0)) != IntPtr.Zero;
+            }
+            finally
+            {
+                CloseFelicaPtr();
+                ClosePasoriPtr();
+            }
+        }
+
         TResult TransferData<TResult>(Func<TResult> readData)
         {
             try
