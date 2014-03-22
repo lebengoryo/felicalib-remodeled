@@ -35,8 +35,8 @@ namespace UnitTest45
         {
             using (var felica = new Felica(FelicaSystemCode.Edy))
             {
-                var target = felica.GetIDm();
-                Assert.AreEqual("0123456789ABCDEF", target.ToHexString());
+                var actual = felica.GetIDm();
+                Assert.AreEqual("0123456789ABCDEF", actual.ToHexString());
             }
         }
 
@@ -45,8 +45,8 @@ namespace UnitTest45
         {
             using (var felica = new Felica(FelicaSystemCode.Edy))
             {
-                var target = felica.GetPMm();
-                Assert.AreEqual("0123456789ABCDEF", target.ToHexString());
+                var actual = felica.GetPMm();
+                Assert.AreEqual("0123456789ABCDEF", actual.ToHexString());
             }
         }
 
@@ -55,8 +55,8 @@ namespace UnitTest45
         {
             using (var felica = new Felica(FelicaSystemCode.Edy))
             {
-                var target = felica.ReadWithoutEncryption(0x1317, 0);
-                Assert.AreEqual(12345, target.ToEdyBalance());
+                var actual = felica.ReadWithoutEncryption(0x1317, 0);
+                Assert.AreEqual(12345, actual.ToEdyBalance());
             }
         }
 

@@ -34,6 +34,9 @@ namespace ConsoleAppTest45
 
                 using (var felica = new Felica(FelicaSystemCode.Edy))
                 {
+                    Console.WriteLine("FeliCa ポート: {0}", felica.TryConnectionToPort());
+                    Console.WriteLine("IC カード: {0}", felica.TryConnectionToCard());
+
                     try
                     {
                         Console.WriteLine(felica.GetIDm().ToHexString());

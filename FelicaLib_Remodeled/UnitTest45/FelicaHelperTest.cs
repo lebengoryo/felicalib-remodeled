@@ -10,22 +10,22 @@ namespace UnitTest45
         [TestMethod]
         public void GetEdyBalance_1()
         {
-            var target = FelicaHelper.GetEdyBalance();
-            Assert.AreEqual(12345, target);
+            var actual = FelicaHelper.GetEdyBalance();
+            Assert.AreEqual(12345, actual);
         }
 
         [TestMethod]
         public void GetWaonBalance_1()
         {
-            var target = FelicaHelper.GetWaonBalance();
-            Assert.AreEqual(12345, target);
+            var actual = FelicaHelper.GetWaonBalance();
+            Assert.AreEqual(12345, actual);
         }
 
         [TestMethod]
         public void GetSuicaBalance_1()
         {
-            var target = FelicaHelper.GetSuicaBalance();
-            Assert.AreEqual(12345, target);
+            var actual = FelicaHelper.GetSuicaBalance();
+            Assert.AreEqual(12345, actual);
         }
     }
 }
