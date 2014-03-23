@@ -56,7 +56,7 @@ namespace FelicaLib
         /// <returns>Edy の残高。</returns>
         public static int GetEdyBalance()
         {
-            var data = FelicaUtility.ReadWithoutEncryption(FelicaSystemCode.Edy, 0x1317, 0);
+            var data = FelicaUtility.ReadWithoutEncryption(FelicaSystemCode.Edy, FelicaServiceCode.EdyBalance, 0);
             return data.ToEdyBalance();
         }
 
@@ -66,7 +66,7 @@ namespace FelicaLib
         /// <returns>WAON の残高。</returns>
         public static int GetWaonBalance()
         {
-            var data = FelicaUtility.ReadWithoutEncryption(FelicaSystemCode.Waon, 0x6817, 0);
+            var data = FelicaUtility.ReadWithoutEncryption(FelicaSystemCode.Waon, FelicaServiceCode.WaonBalance, 0);
             return data.ToWaonBalance();
         }
 
@@ -76,7 +76,7 @@ namespace FelicaLib
         /// <returns>Suica の残高。</returns>
         public static int GetSuicaBalance()
         {
-            var data = FelicaUtility.ReadWithoutEncryption(FelicaSystemCode.Suica, 0x008B, 0);
+            var data = FelicaUtility.ReadWithoutEncryption(FelicaSystemCode.Suica, FelicaServiceCode.SuicaAttributes, 0);
             return data.ToSuicaBalance();
         }
 

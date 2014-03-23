@@ -55,7 +55,7 @@ namespace ConsoleAppTest45
                     }
                     try
                     {
-                        var data = felica.ReadWithoutEncryption(0x1317, 0);
+                        var data = felica.ReadWithoutEncryption(FelicaServiceCode.EdyBalance, 0);
                         Console.WriteLine(data.ToEdyBalance());
                     }
                     catch (Exception ex)
@@ -74,7 +74,7 @@ namespace ConsoleAppTest45
                 {
                     try
                     {
-                        var data = felica.ReadWithoutEncryption(0x1317, 0);
+                        var data = felica.ReadWithoutEncryption(FelicaServiceCode.EdyBalance, 0);
                         Console.WriteLine(data.ToEdyBalance());
                     }
                     catch (Exception ex)
