@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Diagnostics;
 
-namespace UnitTest45.Scenarios
+namespace UnitTest.Scenarios
 {
     /// <summary>
     /// IC カードに接続できない場合のテストです。

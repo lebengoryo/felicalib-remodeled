@@ -71,6 +71,9 @@
     <Compile Include="..\UnitTest45\Scenarios\NoPortTest.cs">
       <Link>Scenarios\NoPortTest.cs</Link>
     </Compile>
+    <Compile Include="..\UnitTest45\Scenarios\SuicaTest.cs">
+      <Link>Scenarios\SuicaTest.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

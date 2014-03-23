@@ -6,10 +6,10 @@ using System.Diagnostics;
 namespace UnitTest.Scenarios
 {
     /// <summary>
-    /// Edy に接続できる場合のテストです。
+    /// Suica に接続できる場合のテストです。
     /// </summary>
     [TestClass]
-    public class EdyTest
+    public class SuicaTest
     {
         [TestMethod]
         public void Felica_TryConnectionToPort()
@@ -37,11 +37,11 @@ namespace UnitTest.Scenarios
             }
             using (var felica = new Felica(FelicaSystemCode.Edy))
             {
-                Assert.AreEqual(true, felica.TryConnectionToCard());
+                Assert.AreEqual(false, felica.TryConnectionToCard());
             }
             using (var felica = new Felica(FelicaSystemCode.Suica))
             {
-                Assert.AreEqual(false, felica.TryConnectionToCard());
+                Assert.AreEqual(true, felica.TryConnectionToCard());
             }
         }
 
@@ -56,6 +56,7 @@ namespace UnitTest.Scenarios
         }
 
         [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
         public void Felica_GetIDm_Edy()
         {
             using (var felica = new Felica(FelicaSystemCode.Edy))
@@ -66,7 +67,6 @@ namespace UnitTest.Scenarios
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void Felica_GetIDm_Suica()
         {
             using (var felica = new Felica(FelicaSystemCode.Suica))
@@ -87,6 +87,7 @@ namespace UnitTest.Scenarios
         }
 
         [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
         public void Felica_ReadWithoutEncryption_Edy()
         {
             using (var felica = new Felica(FelicaSystemCode.Edy))
@@ -106,7 +107,6 @@ namespace UnitTest.Scenarios
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void Felica_ReadWithoutEncryption_Suica()
         {
             using (var felica = new Felica(FelicaSystemCode.Suica))
@@ -125,8 +125,8 @@ namespace UnitTest.Scenarios
         public void FelicaUtility_TryConnectionToCard()
         {
             Assert.AreEqual(true, FelicaUtility.TryConnectionToCard(FelicaSystemCode.Any));
-            Assert.AreEqual(true, FelicaUtility.TryConnectionToCard(FelicaSystemCode.Edy));
-            Assert.AreEqual(false, FelicaUtility.TryConnectionToCard(FelicaSystemCode.Suica));
+            Assert.AreEqual(false, FelicaUtility.TryConnectionToCard(FelicaSystemCode.Edy));
+            Assert.AreEqual(true, FelicaUtility.TryConnectionToCard(FelicaSystemCode.Suica));
         }
 
         [TestMethod]
@@ -137,26 +137,20 @@ namespace UnitTest.Scenarios
         }
 
         [TestMethod]
-        public void FelicaUtility_GetIDm_Edy()
+        public void FelicaUtility_GetIDm_Suica()
         {
-            Debug.WriteLine(FelicaUtility.GetIDm(FelicaSystemCode.Edy).ToHexString());
-            Debug.WriteLine(FelicaUtility.GetPMm(FelicaSystemCode.Edy).ToHexString());
+            Debug.WriteLine(FelicaUtility.GetIDm(FelicaSystemCode.Suica).ToHexString());
+            Debug.WriteLine(FelicaUtility.GetPMm(FelicaSystemCode.Suica).ToHexString());
         }
 
         [TestMethod]
-        public void FelicaUtility_ReadWithoutEncryption_Edy()
+        public void FelicaUtility_ReadWithoutEncryption_Suica()
         {
-            Debug.WriteLine(FelicaUtility.ReadWithoutEncryption(FelicaSystemCode.Edy, 0x1317, 0).ToEdyBalance());
+            Debug.WriteLine(FelicaUtility.ReadWithoutEncryption(FelicaSystemCode.Suica, 0x008B, 0).ToSuicaBalance());
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
-        public void FelicaUtility_ReadWithoutEncryption_Waon()
-        {
-            Debug.WriteLine(FelicaUtility.ReadWithoutEncryption(FelicaSystemCode.Waon, 0x6817, 0).ToWaonBalance());
-        }
-
-        [TestMethod]
         public void FelicaHelper_GetEdyBalance()
         {
             Debug.WriteLine(FelicaHelper.GetEdyBalance());
@@ -170,7 +164,6 @@ namespace UnitTest.Scenarios
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void FelicaHelper_GetSuicaBalance()
         {
             Debug.WriteLine(FelicaHelper.GetSuicaBalance());
