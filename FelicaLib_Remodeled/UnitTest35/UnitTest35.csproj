@@ -56,6 +56,9 @@
     <Compile Include="..\UnitTest45\FelicaHelperTest.cs">
       <Link>FelicaHelperTest.cs</Link>
     </Compile>
+    <Compile Include="..\UnitTest45\FelicaTest.cs">
+      <Link>FelicaTest.cs</Link>
+    </Compile>
     <Compile Include="..\UnitTest45\FelicaUtilityTest.cs">
       <Link>FelicaUtilityTest.cs</Link>
     </Compile>
@@ -68,7 +71,6 @@
     <Compile Include="..\UnitTest45\Scenarios\NoPortTest.cs">
       <Link>Scenarios\NoPortTest.cs</Link>
     </Compile>
-    <Compile Include="FelicaTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
