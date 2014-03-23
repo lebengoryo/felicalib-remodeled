@@ -77,7 +77,6 @@ namespace UnitTest.Scenarios
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void Felica_ReadWithoutEncryption_Any()
         {
             using (var felica = new Felica(FelicaSystemCode.Any))
@@ -93,16 +92,6 @@ namespace UnitTest.Scenarios
             using (var felica = new Felica(FelicaSystemCode.Edy))
             {
                 Debug.WriteLine(felica.ReadWithoutEncryption(FelicaServiceCode.EdyBalance, 0).ToEdyBalance());
-            }
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void Felica_ReadWithoutEncryption_Waon()
-        {
-            using (var felica = new Felica(FelicaSystemCode.Waon))
-            {
-                Debug.WriteLine(felica.ReadWithoutEncryption(FelicaServiceCode.WaonBalance, 0).ToWaonBalance());
             }
         }
 

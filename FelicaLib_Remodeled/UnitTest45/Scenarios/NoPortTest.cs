@@ -40,16 +40,6 @@ namespace UnitTest.Scenarios
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void Felica_ReadWithoutEncryption()
-        {
-            using (var felica = new Felica(FelicaSystemCode.Edy))
-            {
-                Debug.WriteLine(felica.ReadWithoutEncryption(FelicaServiceCode.EdyBalance, 0).ToEdyBalance());
-            }
-        }
-
-        [TestMethod]
         public void FelicaUtility_TryConnectionToPort()
         {
             Assert.AreEqual(false, FelicaUtility.TryConnectionToPort());
@@ -59,8 +49,6 @@ namespace UnitTest.Scenarios
         public void FelicaUtility_TryConnectionToCard()
         {
             Assert.AreEqual(false, FelicaUtility.TryConnectionToCard(FelicaSystemCode.Any));
-            Assert.AreEqual(false, FelicaUtility.TryConnectionToCard(FelicaSystemCode.Edy));
-            Assert.AreEqual(false, FelicaUtility.TryConnectionToCard(FelicaSystemCode.Suica));
         }
 
         [TestMethod]
