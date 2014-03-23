@@ -50,10 +50,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="FelicaTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="FelicaUtilityTest.cs" />
-    <Compile Include="FelicaHelperTest.cs" />
     <Compile Include="Scenarios\NoPortTest.cs" />
     <Compile Include="Scenarios\EdyTest.cs" />
     <Compile Include="Scenarios\NoCardTest.cs" />
