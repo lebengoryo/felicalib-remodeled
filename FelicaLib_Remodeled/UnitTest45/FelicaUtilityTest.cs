@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
-namespace UnitTest45
+namespace UnitTest
 {
     [TestClass]
     public class FelicaUtilityTest
