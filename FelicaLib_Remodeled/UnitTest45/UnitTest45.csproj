@@ -56,6 +56,7 @@
     <Compile Include="FelicaHelperTest.cs" />
     <Compile Include="Scenarios\NoPortTest.cs" />
     <Compile Include="Scenarios\EdyTest.cs" />
+    <Compile Include="Scenarios\NoCardTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FelicaLib_DotNet\FelicaLib_DotNet.csproj">
