@@ -116,6 +116,31 @@ namespace UnitTest.Scenarios
         }
 
         [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void Felica_ReadBlocksWithoutEncryption_Any()
+        {
+            using (var felica = new Felica(FelicaSystemCode.Any))
+            {
+                foreach (var data in felica.ReadBlocksWithoutEncryption(0x170F, 0, 6))
+                {
+                    Debug.WriteLine(data.ToHexString());
+                }
+            }
+        }
+
+        [TestMethod]
+        public void Felica_ReadBlocksWithoutEncryption_Edy()
+        {
+            using (var felica = new Felica(FelicaSystemCode.Edy))
+            {
+                foreach (var data in felica.ReadBlocksWithoutEncryption(0x170F, 0, 6))
+                {
+                    Debug.WriteLine(data.ToHexString());
+                }
+            }
+        }
+
+        [TestMethod]
         public void FelicaUtility_TryConnectionToPort()
         {
             Assert.AreEqual(true, FelicaUtility.TryConnectionToPort());

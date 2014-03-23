@@ -38,6 +38,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -405,11 +406,11 @@ namespace FelicaLib
         }
 
         /// <summary>
-        /// 非暗号化領域のデータを読み込みます。
+        /// 非暗号化領域の 1 つのブロックのデータを読み込みます。
         /// </summary>
         /// <param name="serviceCode">サービス コード。</param>
         /// <param name="address">アドレス。</param>
-        /// <returns>非暗号化領域のデータ。配列の長さは 16 です。</returns>
+        /// <returns>非暗号化領域のブロックのデータ。配列の長さは 16 です。</returns>
         public byte[] ReadWithoutEncryption(int serviceCode, int address)
         {
             return TransferData(() =>
@@ -421,6 +422,32 @@ namespace FelicaLib
                 }
                 // 関数の戻り値が 0 でも、配列の要素がすべて 0 のままであることがあります。
                 return data;
+            });
+        }
+
+        /// <summary>
+        /// 非暗号化領域の連続した複数のブロックのデータを読み込みます。
+        /// </summary>
+        /// <param name="serviceCode">サービス コード。</param>
+        /// <param name="addressStart">読み込むブロックの最初のアドレス。</param>
+        /// <param name="addressCount">読み込むブロックの数。</param>
+        /// <returns>非暗号化領域のブロックのデータのシーケンス。</returns>
+        public IEnumerable<byte[]> ReadBlocksWithoutEncryption(int serviceCode, int addressStart, int addressCount)
+        {
+            return TransferData(() =>
+            {
+                return Enumerable.Range(addressStart, addressCount)
+                    .Select(i =>
+                    {
+                        var data = new byte[16];
+                        if (felica_read_without_encryption02(felicaPtr, serviceCode, 0, (byte)i, data) != 0)
+                        {
+                            throw new InvalidOperationException("指定されたサービス コードおよびアドレスのデータが存在しません。");
+                        }
+                        // 関数の戻り値が 0 でも、配列の要素がすべて 0 のままであることがあります。
+                        return data;
+                    })
+                    .ToArray();
             });
         }
     }
