@@ -182,6 +182,15 @@ namespace UnitTest.Scenarios
         }
 
         [TestMethod]
+        public void FelicaUtility_ReadBlocksWithoutEncryption_Edy()
+        {
+            foreach (var data in FelicaUtility.ReadBlocksWithoutEncryption(FelicaSystemCode.Edy, 0x170F, 0, 6))
+            {
+                Debug.WriteLine(data.ToHexString());
+            }
+        }
+
+        [TestMethod]
         public void FelicaHelper_GetEdyBalance()
         {
             Debug.WriteLine(FelicaHelper.GetEdyBalance());
