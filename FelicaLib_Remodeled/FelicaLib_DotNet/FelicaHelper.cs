@@ -27,6 +27,25 @@ namespace FelicaLib
     }
 
     /// <summary>
+    /// FeliCa のサービス コードを表します。
+    /// </summary>
+    public static class FelicaServiceCode
+    {
+        /// <summary>Edy の残高情報。</summary>
+        public const int EdyBalance = 0x1317;
+        /// <summary>Edy の履歴情報。</summary>
+        public const int EdyHistory = 0x170F;
+        /// <summary>WAON の残高情報。</summary>
+        public const int WaonBalance = 0x6817;
+        /// <summary>WAON の履歴情報。</summary>
+        public const int WaonHistory = 0x680B;
+        /// <summary>Suica の属性情報。</summary>
+        public const int SuicaAttributes = 0x008B;
+        /// <summary>Suica の履歴情報。</summary>
+        public const int SuicaHistory = 0x090F;
+    }
+
+    /// <summary>
     /// FeliCa に関するヘルパー メソッドを提供します。
     /// </summary>
     public static class FelicaHelper
