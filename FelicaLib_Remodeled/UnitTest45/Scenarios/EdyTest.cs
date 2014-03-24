@@ -112,6 +112,16 @@ namespace UnitTest.Scenarios
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
+        public void Felica_ReadWithoutEncryption_Edy_OutOfRange()
+        {
+            using (var felica = new Felica(FelicaSystemCode.Edy))
+            {
+                Debug.WriteLine(felica.ReadWithoutEncryption(FelicaServiceCode.EdyBalance, 1).ToEdyBalance());
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
         public void Felica_ReadWithoutEncryption_Waon()
         {
             using (var felica = new Felica(FelicaSystemCode.Waon))
@@ -149,6 +159,19 @@ namespace UnitTest.Scenarios
             using (var felica = new Felica(FelicaSystemCode.Edy))
             {
                 foreach (var data in felica.ReadBlocksWithoutEncryption(FelicaServiceCode.EdyHistory, 0, 6))
+                {
+                    Debug.WriteLine(data.ToHexString());
+                }
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void Felica_ReadBlocksWithoutEncryption_Edy_OutOfRange()
+        {
+            using (var felica = new Felica(FelicaSystemCode.Edy))
+            {
+                foreach (var data in felica.ReadBlocksWithoutEncryption(FelicaServiceCode.EdyHistory, 5, 2))
                 {
                     Debug.WriteLine(data.ToHexString());
                 }
