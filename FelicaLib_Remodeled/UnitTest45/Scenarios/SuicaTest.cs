@@ -219,5 +219,14 @@ namespace UnitTest.Scenarios
         {
             Debug.WriteLine(FelicaHelper.GetSuicaBalance());
         }
+
+        [TestMethod]
+        public void FelicaHelper_GetSuicaHistory()
+        {
+            foreach (var item in FelicaHelper.GetSuicaHistory())
+            {
+                Debug.WriteLine(string.Format("{0}, ID: {1}, 利用区分: {2}, 残高: {3}", item.DateTime, item.TransactionId, item.UsageCode, item.Balance));
+            }
+        }
     }
 }

@@ -72,6 +72,33 @@ namespace FelicaLib
         public int Balance { get { return RawData.ToInt32(12, 4); } }
     }
 
+    [DebuggerDisplay(@"\{ID: {TransactionId}, {DateTime}\}")]
+    public class SuicaHistoryItem
+    {
+        public byte[] RawData { get; private set; }
+        public SuicaHistoryItem(byte[] data)
+        {
+            RawData = data;
+        }
+
+        public DateTime DateTime
+        {
+            get
+            {
+                var year = 2000 + (RawData.ToInt32(4, 1) >> 1);
+                var month = RawData.ToInt32(4, 2) >> 5 & 0x000F;
+                var day = RawData.ToInt32(5, 1) & 0x1F;
+                return new DateTime(year, month, day);
+            }
+        }
+        public int DeviceCode { get { return RawData.ToInt32(0, 1); } }
+        public int UsageCode { get { return RawData.ToInt32(1, 1); } }
+        public int PaymentCode { get { return RawData.ToInt32(2, 1); } }
+        public int EntryCode { get { return RawData.ToInt32(3, 1); } }
+        public int Balance { get { return RawData.ToInt32(10, 2, true); } }
+        public int TransactionId { get { return RawData.ToInt32(13, 2); } }
+    }
+
     /// <summary>
     /// FeliCa に関するヘルパー メソッドを提供します。
     /// </summary>
@@ -115,6 +142,16 @@ namespace FelicaLib
         {
             var data = FelicaUtility.ReadWithoutEncryption(FelicaSystemCode.Suica, FelicaServiceCode.SuicaAttributes, 0);
             return data.ToSuicaBalance();
+        }
+
+        /// <summary>
+        /// Suica の利用履歴を取得します。
+        /// </summary>
+        /// <returns>Suica の利用履歴。</returns>
+        public static IEnumerable<SuicaHistoryItem> GetSuicaHistory()
+        {
+            var data = FelicaUtility.ReadBlocksWithoutEncryption(FelicaSystemCode.Suica, FelicaServiceCode.SuicaHistory, 0, 20);
+            return data.Select(x => new SuicaHistoryItem(x));
         }
 
         /// <summary>
