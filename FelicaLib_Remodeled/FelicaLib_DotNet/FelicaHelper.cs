@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace FelicaLib
@@ -45,6 +46,32 @@ namespace FelicaLib
         public const int SuicaHistory = 0x090F;
     }
 
+    [DebuggerDisplay(@"\{ID: {TransactionId}, {DateTime}\}")]
+    public class EdyHistoryItem
+    {
+        public byte[] RawData { get; private set; }
+        public EdyHistoryItem(byte[] data)
+        {
+            RawData = data;
+        }
+
+        static readonly DateTime BaseDateTime = new DateTime(2000, 1, 1);
+
+        public DateTime DateTime
+        {
+            get
+            {
+                var days = RawData.ToInt32(4, 2) >> 1;
+                var seconds = RawData.ToInt32(5, 3) & 0x01FFFF;
+                return BaseDateTime.AddDays(days).AddSeconds(seconds);
+            }
+        }
+        public int UsageCode { get { return RawData.ToInt32(0, 1); } }
+        public int TransactionId { get { return RawData.ToInt32(2, 2); } }
+        public int Amount { get { return RawData.ToInt32(8, 4); } }
+        public int Balance { get { return RawData.ToInt32(12, 4); } }
+    }
+
     /// <summary>
     /// FeliCa に関するヘルパー メソッドを提供します。
     /// </summary>
@@ -58,6 +85,16 @@ namespace FelicaLib
         {
             var data = FelicaUtility.ReadWithoutEncryption(FelicaSystemCode.Edy, FelicaServiceCode.EdyBalance, 0);
             return data.ToEdyBalance();
+        }
+
+        /// <summary>
+        /// Edy の利用履歴を取得します。
+        /// </summary>
+        /// <returns>Edy の利用履歴。</returns>
+        public static IEnumerable<EdyHistoryItem> GetEdyHistory()
+        {
+            var data = FelicaUtility.ReadBlocksWithoutEncryption(FelicaSystemCode.Edy, FelicaServiceCode.EdyHistory, 0, 6);
+            return data.Select(x => new EdyHistoryItem(x));
         }
 
         /// <summary>

@@ -249,6 +249,15 @@ namespace UnitTest.Scenarios
         }
 
         [TestMethod]
+        public void FelicaHelper_GetEdyHistory()
+        {
+            foreach (var item in FelicaHelper.GetEdyHistory())
+            {
+                Debug.WriteLine(string.Format("{0}, ID: {1}, 利用区分: {2}, 利用額: {3}, 残高: {4}", item.DateTime, item.TransactionId, item.UsageCode, item.Amount, item.Balance));
+            }
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
         public void FelicaHelper_GetWaonBalance()
         {
