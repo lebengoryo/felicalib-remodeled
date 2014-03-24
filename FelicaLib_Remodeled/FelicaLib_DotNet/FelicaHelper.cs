@@ -87,12 +87,7 @@ namespace FelicaLib
         /// <returns>Edy の残高。</returns>
         public static int ToEdyBalance(this byte[] data)
         {
-            if (data == null) throw new ArgumentNullException("data");
-
-            return data
-                .Take(4)
-                .Select((b, i) => b * (int)Math.Pow(256, i))
-                .Sum();
+            return data.ToInt32(0, 4, true);
         }
 
         /// <summary>
@@ -102,12 +97,7 @@ namespace FelicaLib
         /// <returns>WAON の残高。</returns>
         public static int ToWaonBalance(this byte[] data)
         {
-            if (data == null) throw new ArgumentNullException("data");
-
-            return data
-                .Take(2)
-                .Select((b, i) => b * (int)Math.Pow(256, i))
-                .Sum();
+            return data.ToInt32(0, 2, true);
         }
 
         /// <summary>
@@ -117,13 +107,7 @@ namespace FelicaLib
         /// <returns>Suica の残高。</returns>
         public static int ToSuicaBalance(this byte[] data)
         {
-            if (data == null) throw new ArgumentNullException("data");
-
-            return data
-                .Skip(11)
-                .Take(2)
-                .Select((b, i) => b * (int)Math.Pow(256, i))
-                .Sum();
+            return data.ToInt32(11, 2, true);
         }
 
         /// <summary>
