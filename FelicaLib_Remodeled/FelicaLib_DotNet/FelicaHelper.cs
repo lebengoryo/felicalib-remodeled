@@ -127,6 +127,39 @@ namespace FelicaLib
         }
 
         /// <summary>
+        /// バイト配列から指定した部分の要素を数値に変換します。
+        /// </summary>
+        /// <param name="data">バイト配列。</param>
+        /// <param name="start">開始インデックス。</param>
+        /// <param name="count">要素の数。</param>
+        /// <returns>数値。</returns>
+        public static int ToInt32(this byte[] data, int start, int count)
+        {
+            return ToInt32(data, start, count, false);
+        }
+
+        /// <summary>
+        /// バイト配列から指定した部分の要素を数値に変換します。
+        /// </summary>
+        /// <param name="data">バイト配列。</param>
+        /// <param name="start">開始インデックス。</param>
+        /// <param name="count">要素の数。</param>
+        /// <param name="littleEndian">リトル エンディアンの場合は <see langword="true"/>。</param>
+        /// <returns>数値。</returns>
+        public static int ToInt32(this byte[] data, int start, int count, bool littleEndian)
+        {
+            if (data == null) throw new ArgumentNullException("data");
+            if (count < 0 || 4 < count) throw new ArgumentOutOfRangeException("count", "最大で 4 バイトです。");
+            if (start < 0 || data.Length < start + count) throw new IndexOutOfRangeException("指定されたインデックスが範囲外です。");
+
+            return data
+                .Skip(start)
+                .Take(count)
+                .Select((b, i) => b * (int)Math.Pow(256, littleEndian ? i : count - 1 - i))
+                .Sum();
+        }
+
+        /// <summary>
         /// バイト配列を 16 進数表記の文字列に変換します。
         /// </summary>
         /// <param name="data">バイト配列。</param>
