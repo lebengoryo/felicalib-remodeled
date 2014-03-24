@@ -46,22 +46,15 @@ namespace UnitTest.Scenarios
         }
 
         [TestMethod]
-        public void Felica_GetIDm_Any()
+        public void Felica_GetIDm()
         {
             using (var felica = new Felica(FelicaSystemCode.Any))
             {
                 Debug.WriteLine(felica.GetIDm().ToHexString());
-                Debug.WriteLine(felica.GetPMm().ToHexString());
             }
-        }
-
-        [TestMethod]
-        public void Felica_GetIDm_Edy()
-        {
             using (var felica = new Felica(FelicaSystemCode.Edy))
             {
                 Debug.WriteLine(felica.GetIDm().ToHexString());
-                Debug.WriteLine(felica.GetPMm().ToHexString());
             }
         }
 
@@ -72,6 +65,28 @@ namespace UnitTest.Scenarios
             using (var felica = new Felica(FelicaSystemCode.Suica))
             {
                 Debug.WriteLine(felica.GetIDm().ToHexString());
+            }
+        }
+
+        [TestMethod]
+        public void Felica_GetPMm()
+        {
+            using (var felica = new Felica(FelicaSystemCode.Any))
+            {
+                Debug.WriteLine(felica.GetPMm().ToHexString());
+            }
+            using (var felica = new Felica(FelicaSystemCode.Edy))
+            {
+                Debug.WriteLine(felica.GetPMm().ToHexString());
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void Felica_GetPMm_Suica()
+        {
+            using (var felica = new Felica(FelicaSystemCode.Suica))
+            {
                 Debug.WriteLine(felica.GetPMm().ToHexString());
             }
         }
@@ -155,17 +170,31 @@ namespace UnitTest.Scenarios
         }
 
         [TestMethod]
-        public void FelicaUtility_GetIDm_Any()
+        public void FelicaUtility_GetIDm()
         {
             Debug.WriteLine(FelicaUtility.GetIDm(FelicaSystemCode.Any).ToHexString());
-            Debug.WriteLine(FelicaUtility.GetPMm(FelicaSystemCode.Any).ToHexString());
+            Debug.WriteLine(FelicaUtility.GetIDm(FelicaSystemCode.Edy).ToHexString());
         }
 
         [TestMethod]
-        public void FelicaUtility_GetIDm_Edy()
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void FelicaUtility_GetIDm_Suica()
         {
-            Debug.WriteLine(FelicaUtility.GetIDm(FelicaSystemCode.Edy).ToHexString());
+            Debug.WriteLine(FelicaUtility.GetIDm(FelicaSystemCode.Suica).ToHexString());
+        }
+
+        [TestMethod]
+        public void FelicaUtility_GetPMm()
+        {
+            Debug.WriteLine(FelicaUtility.GetPMm(FelicaSystemCode.Any).ToHexString());
             Debug.WriteLine(FelicaUtility.GetPMm(FelicaSystemCode.Edy).ToHexString());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void FelicaUtility_GetPMm_Suica()
+        {
+            Debug.WriteLine(FelicaUtility.GetPMm(FelicaSystemCode.Suica).ToHexString());
         }
 
         [TestMethod]
