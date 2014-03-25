@@ -97,8 +97,7 @@ namespace UnitTest.Scenarios
         {
             using (var felica = new Felica(FelicaSystemCode.Any))
             {
-                var data = felica.ReadWithoutEncryption(FelicaServiceCode.EdyBalance, 0);
-                Debug.WriteLine(new EdyBalanceItem(data).Balance);
+                Debug.WriteLine(felica.ReadWithoutEncryption(FelicaServiceCode.EdyBalance, 0).ToHexString());
             }
         }
 
@@ -107,8 +106,7 @@ namespace UnitTest.Scenarios
         {
             using (var felica = new Felica(FelicaSystemCode.Edy))
             {
-                var data = felica.ReadWithoutEncryption(FelicaServiceCode.EdyBalance, 0);
-                Debug.WriteLine(new EdyBalanceItem(data).Balance);
+                Debug.WriteLine(felica.ReadWithoutEncryption(FelicaServiceCode.EdyBalance, 0).ToHexString());
             }
         }
 
@@ -118,8 +116,7 @@ namespace UnitTest.Scenarios
         {
             using (var felica = new Felica(FelicaSystemCode.Edy))
             {
-                var data = felica.ReadWithoutEncryption(FelicaServiceCode.EdyBalance, 1);
-                Debug.WriteLine(new EdyBalanceItem(data).Balance);
+                Debug.WriteLine(felica.ReadWithoutEncryption(FelicaServiceCode.EdyBalance, 1).ToHexString());
             }
         }
 
@@ -129,8 +126,7 @@ namespace UnitTest.Scenarios
         {
             using (var felica = new Felica(FelicaSystemCode.Waon))
             {
-                var data = felica.ReadWithoutEncryption(FelicaServiceCode.WaonBalance, 0);
-                Debug.WriteLine(new WaonBalanceItem(data).Balance);
+                Debug.WriteLine(felica.ReadWithoutEncryption(FelicaServiceCode.WaonBalance, 0).ToHexString());
             }
         }
 
@@ -140,8 +136,7 @@ namespace UnitTest.Scenarios
         {
             using (var felica = new Felica(FelicaSystemCode.Suica))
             {
-                var data = felica.ReadWithoutEncryption(FelicaServiceCode.SuicaAttributes, 0);
-                Debug.WriteLine(new SuicaAttributesItem(data).Balance);
+                Debug.WriteLine(felica.ReadWithoutEncryption(FelicaServiceCode.SuicaAttributes, 0).ToHexString());
             }
         }
 
@@ -228,16 +223,14 @@ namespace UnitTest.Scenarios
         [TestMethod]
         public void FelicaUtility_ReadWithoutEncryption_Edy()
         {
-            var data = FelicaUtility.ReadWithoutEncryption(FelicaSystemCode.Edy, FelicaServiceCode.EdyBalance, 0);
-            Debug.WriteLine(new EdyBalanceItem(data).Balance);
+            Debug.WriteLine(FelicaUtility.ReadWithoutEncryption(FelicaSystemCode.Edy, FelicaServiceCode.EdyBalance, 0).ToHexString());
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
         public void FelicaUtility_ReadWithoutEncryption_Waon()
         {
-            var data = FelicaUtility.ReadWithoutEncryption(FelicaSystemCode.Waon, FelicaServiceCode.WaonBalance, 0);
-            Debug.WriteLine(new WaonBalanceItem(data).Balance);
+            Debug.WriteLine(FelicaUtility.ReadWithoutEncryption(FelicaSystemCode.Waon, FelicaServiceCode.WaonBalance, 0).ToHexString());
         }
 
         [TestMethod]
