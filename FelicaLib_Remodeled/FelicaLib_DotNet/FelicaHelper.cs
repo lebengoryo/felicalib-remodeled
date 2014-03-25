@@ -94,6 +94,23 @@ namespace FelicaLib
         public int Balance { get { return RawData.ToInt32(12, 4); } }
     }
 
+    /// <summary>
+    /// WAON の残高情報を表します。
+    /// </summary>
+    [DebuggerDisplay(@"\{Balance: {Balance}\}")]
+    public class WaonBalanceItem : FelicaBlockItem
+    {
+        /// <summary>
+        /// <see cref="WaonBalanceItem"/> クラスの新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="data">バイナリ データ。</param>
+        public WaonBalanceItem(byte[] data) : base(data) { }
+
+        /// <summary>残高を取得します。</summary>
+        /// <value>残高。</value>
+        public int Balance { get { return RawData.ToInt32(0, 2, true); } }
+    }
+
     [DebuggerDisplay(@"\{ID: {TransactionId}, {DateTime}\}")]
     public class SuicaHistoryItem : FelicaBlockItem
     {
@@ -150,7 +167,8 @@ namespace FelicaLib
         public static int GetWaonBalance()
         {
             var data = FelicaUtility.ReadWithoutEncryption(FelicaSystemCode.Waon, FelicaServiceCode.WaonBalance, 0);
-            return data.ToWaonBalance();
+            var item = new WaonBalanceItem(data);
+            return item.Balance;
         }
 
         /// <summary>
@@ -171,16 +189,6 @@ namespace FelicaLib
         {
             var data = FelicaUtility.ReadBlocksWithoutEncryption(FelicaSystemCode.Suica, FelicaServiceCode.SuicaHistory, 0, 20);
             return data.Select(x => new SuicaHistoryItem(x));
-        }
-
-        /// <summary>
-        /// WAON の残高情報のバイナリ データを残高に変換します。
-        /// </summary>
-        /// <param name="data">バイナリ データ。</param>
-        /// <returns>WAON の残高。</returns>
-        public static int ToWaonBalance(this byte[] data)
-        {
-            return data.ToInt32(0, 2, true);
         }
 
         /// <summary>

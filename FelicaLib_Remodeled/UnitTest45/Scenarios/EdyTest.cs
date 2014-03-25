@@ -129,7 +129,8 @@ namespace UnitTest.Scenarios
         {
             using (var felica = new Felica(FelicaSystemCode.Waon))
             {
-                Debug.WriteLine(felica.ReadWithoutEncryption(FelicaServiceCode.WaonBalance, 0).ToWaonBalance());
+                var data = felica.ReadWithoutEncryption(FelicaServiceCode.WaonBalance, 0);
+                Debug.WriteLine(new WaonBalanceItem(data).Balance);
             }
         }
 
@@ -234,7 +235,8 @@ namespace UnitTest.Scenarios
         [ExpectedException(typeof(InvalidOperationException))]
         public void FelicaUtility_ReadWithoutEncryption_Waon()
         {
-            Debug.WriteLine(FelicaUtility.ReadWithoutEncryption(FelicaSystemCode.Waon, FelicaServiceCode.WaonBalance, 0).ToWaonBalance());
+            var data = FelicaUtility.ReadWithoutEncryption(FelicaSystemCode.Waon, FelicaServiceCode.WaonBalance, 0);
+            Debug.WriteLine(new WaonBalanceItem(data).Balance);
         }
 
         [TestMethod]
