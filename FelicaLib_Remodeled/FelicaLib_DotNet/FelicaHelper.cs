@@ -88,10 +88,16 @@ namespace FelicaLib
     [DebuggerDisplay(@"\{ID: {TransactionId}, {DateTime}\}")]
     public class EdyHistoryItem : FelicaBlockItem
     {
+        /// <summary>
+        /// <see cref="EdyHistoryItem"/> クラスの新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="data">バイナリ データ。</param>
         public EdyHistoryItem(byte[] data) : base(data) { }
 
         static readonly DateTime BaseDateTime = new DateTime(2000, 1, 1);
 
+        /// <summary>利用日時を取得します。</summary>
+        /// <value>利用日時。</value>
         public DateTime DateTime
         {
             get
@@ -101,9 +107,18 @@ namespace FelicaLib
                 return BaseDateTime.AddDays(days).AddSeconds(seconds);
             }
         }
+
+        /// <summary>利用種別を取得します。</summary>
+        /// <value>利用種別。</value>
         public int UsageCode { get { return RawData.ToInt32(0, 1); } }
+        /// <summary>取引通番を取得します。</summary>
+        /// <value>取引通番。</value>
         public int TransactionId { get { return RawData.ToInt32(2, 2); } }
+        /// <summary>利用額を取得します。</summary>
+        /// <value>利用額。</value>
         public int Amount { get { return RawData.ToInt32(8, 4); } }
+        /// <summary>残高を取得します。</summary>
+        /// <value>残高。</value>
         public int Balance { get { return RawData.ToInt32(12, 4); } }
     }
 
@@ -158,8 +173,14 @@ namespace FelicaLib
     [DebuggerDisplay(@"\{ID: {TransactionId}, {DateTime}\}")]
     public class SuicaHistoryItem : FelicaBlockItem
     {
+        /// <summary>
+        /// <see cref="SuicaHistoryItem"/> クラスの新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="data">バイナリ データ。</param>
         public SuicaHistoryItem(byte[] data) : base(data) { }
 
+        /// <summary>利用日付を取得します。</summary>
+        /// <value>利用日付。</value>
         public DateTime DateTime
         {
             get
@@ -170,11 +191,24 @@ namespace FelicaLib
                 return new DateTime(year, month, day);
             }
         }
+
+        /// <summary>機器種別を取得します。</summary>
+        /// <value>機器種別。</value>
         public int DeviceCode { get { return RawData.ToInt32(0, 1); } }
+        /// <summary>利用種別を取得します。</summary>
+        /// <value>利用種別。</value>
         public int UsageCode { get { return RawData.ToInt32(1, 1); } }
+        /// <summary>支払種別を取得します。</summary>
+        /// <value>支払種別。</value>
         public int PaymentCode { get { return RawData.ToInt32(2, 1); } }
+        /// <summary>入出場種別を取得します。</summary>
+        /// <value>入出場種別。</value>
         public int EntryCode { get { return RawData.ToInt32(3, 1); } }
+        /// <summary>残高を取得します。</summary>
+        /// <value>残高。</value>
         public int Balance { get { return RawData.ToInt32(10, 2, true); } }
+        /// <summary>取引通番を取得します。</summary>
+        /// <value>取引通番。</value>
         public int TransactionId { get { return RawData.ToInt32(13, 2); } }
     }
 
