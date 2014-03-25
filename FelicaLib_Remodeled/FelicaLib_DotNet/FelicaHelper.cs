@@ -46,9 +46,19 @@ namespace FelicaLib
         public const int SuicaHistory = 0x090F;
     }
 
+    /// <summary>
+    /// FeliCa のブロックを表すための基本クラスです。
+    /// </summary>
     public abstract class FelicaBlockItem
     {
+        /// <summary>元のバイナリ データを取得します。</summary>
+        /// <value>元のバイナリ データ。</value>
         public byte[] RawData { get; private set; }
+
+        /// <summary>
+        /// <see cref="FelicaBlockItem"/> クラスの新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="data">バイナリ データ。</param>
         protected FelicaBlockItem(byte[] data)
         {
             RawData = data;
@@ -72,6 +82,9 @@ namespace FelicaLib
         public int Balance { get { return RawData.ToInt32(0, 4, true); } }
     }
 
+    /// <summary>
+    /// Edy の履歴情報を表します。
+    /// </summary>
     [DebuggerDisplay(@"\{ID: {TransactionId}, {DateTime}\}")]
     public class EdyHistoryItem : FelicaBlockItem
     {
@@ -113,6 +126,7 @@ namespace FelicaLib
 
     /// <summary>
     /// Suica の属性情報を表します。
+    /// PASMO などの交通系 IC カードと互換性があります。
     /// </summary>
     [DebuggerDisplay(@"\{Balance: {Balance}\}")]
     public class SuicaAttributesItem : FelicaBlockItem
@@ -123,14 +137,24 @@ namespace FelicaLib
         /// <param name="data">バイナリ データ。</param>
         public SuicaAttributesItem(byte[] data) : base(data) { }
 
+        /// <summary>カード種別を取得します。</summary>
+        /// <value>カード種別。</value>
         public int CardCode { get { return RawData.ToInt32(8, 1) >> 4; } }
+        /// <summary>地域を取得します。</summary>
+        /// <value>地域。</value>
         public int AreaCode { get { return RawData.ToInt32(8, 1) & 0x0F; } }
         /// <summary>残高を取得します。</summary>
         /// <value>残高。</value>
         public int Balance { get { return RawData.ToInt32(11, 2, true); } }
+        /// <summary>取引通番を取得します。</summary>
+        /// <value>取引通番。</value>
         public int TransactionId { get { return RawData.ToInt32(14, 2); } }
     }
 
+    /// <summary>
+    /// Suica の履歴情報を表します。
+    /// PASMO などの交通系 IC カードと互換性があります。
+    /// </summary>
     [DebuggerDisplay(@"\{ID: {TransactionId}, {DateTime}\}")]
     public class SuicaHistoryItem : FelicaBlockItem
     {
@@ -192,7 +216,7 @@ namespace FelicaLib
         }
 
         /// <summary>
-        /// Suica の残高を取得します。PASMO などの交通系 IC カードと互換性があります。
+        /// Suica の残高を取得します。
         /// </summary>
         /// <returns>Suica の残高。</returns>
         public static int GetSuicaBalance()
