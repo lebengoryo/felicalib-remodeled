@@ -140,7 +140,8 @@ namespace UnitTest.Scenarios
         {
             using (var felica = new Felica(FelicaSystemCode.Suica))
             {
-                Debug.WriteLine(felica.ReadWithoutEncryption(FelicaServiceCode.SuicaAttributes, 0).ToSuicaBalance());
+                var data = felica.ReadWithoutEncryption(FelicaServiceCode.SuicaAttributes, 0);
+                Debug.WriteLine(new SuicaAttributesItem(data).Balance);
             }
         }
 

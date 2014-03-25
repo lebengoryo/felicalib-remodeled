@@ -111,6 +111,26 @@ namespace FelicaLib
         public int Balance { get { return RawData.ToInt32(0, 2, true); } }
     }
 
+    /// <summary>
+    /// Suica の属性情報を表します。
+    /// </summary>
+    [DebuggerDisplay(@"\{Balance: {Balance}\}")]
+    public class SuicaAttributesItem : FelicaBlockItem
+    {
+        /// <summary>
+        /// <see cref="SuicaAttributesItem"/> クラスの新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="data">バイナリ データ。</param>
+        public SuicaAttributesItem(byte[] data) : base(data) { }
+
+        public int CardCode { get { return RawData.ToInt32(8, 1) >> 4; } }
+        public int AreaCode { get { return RawData.ToInt32(8, 1) & 0x0F; } }
+        /// <summary>残高を取得します。</summary>
+        /// <value>残高。</value>
+        public int Balance { get { return RawData.ToInt32(11, 2, true); } }
+        public int TransactionId { get { return RawData.ToInt32(14, 2); } }
+    }
+
     [DebuggerDisplay(@"\{ID: {TransactionId}, {DateTime}\}")]
     public class SuicaHistoryItem : FelicaBlockItem
     {
@@ -178,7 +198,8 @@ namespace FelicaLib
         public static int GetSuicaBalance()
         {
             var data = FelicaUtility.ReadWithoutEncryption(FelicaSystemCode.Suica, FelicaServiceCode.SuicaAttributes, 0);
-            return data.ToSuicaBalance();
+            var item = new SuicaAttributesItem(data);
+            return item.Balance;
         }
 
         /// <summary>
@@ -189,16 +210,6 @@ namespace FelicaLib
         {
             var data = FelicaUtility.ReadBlocksWithoutEncryption(FelicaSystemCode.Suica, FelicaServiceCode.SuicaHistory, 0, 20);
             return data.Select(x => new SuicaHistoryItem(x));
-        }
-
-        /// <summary>
-        /// Suica の属性情報のバイナリ データを残高に変換します。PASMO などの交通系 IC カードと互換性があります。
-        /// </summary>
-        /// <param name="data">バイナリ データ。</param>
-        /// <returns>Suica の残高。</returns>
-        public static int ToSuicaBalance(this byte[] data)
-        {
-            return data.ToInt32(11, 2, true);
         }
 
         /// <summary>

@@ -96,7 +96,8 @@ namespace UnitTest.Scenarios
         {
             using (var felica = new Felica(FelicaSystemCode.Any))
             {
-                Debug.WriteLine(felica.ReadWithoutEncryption(FelicaServiceCode.SuicaAttributes, 0).ToSuicaBalance());
+                var data = felica.ReadWithoutEncryption(FelicaServiceCode.SuicaAttributes, 0);
+                Debug.WriteLine(new SuicaAttributesItem(data).Balance);
             }
         }
 
@@ -116,7 +117,8 @@ namespace UnitTest.Scenarios
         {
             using (var felica = new Felica(FelicaSystemCode.Suica))
             {
-                Debug.WriteLine(felica.ReadWithoutEncryption(FelicaServiceCode.SuicaAttributes, 0).ToSuicaBalance());
+                var data = felica.ReadWithoutEncryption(FelicaServiceCode.SuicaAttributes, 0);
+                Debug.WriteLine(new SuicaAttributesItem(data).Balance);
             }
         }
 
@@ -189,7 +191,8 @@ namespace UnitTest.Scenarios
         [TestMethod]
         public void FelicaUtility_ReadWithoutEncryption_Suica()
         {
-            Debug.WriteLine(FelicaUtility.ReadWithoutEncryption(FelicaSystemCode.Suica, FelicaServiceCode.SuicaAttributes, 0).ToSuicaBalance());
+            var data = FelicaUtility.ReadWithoutEncryption(FelicaSystemCode.Suica, FelicaServiceCode.SuicaAttributes, 0);
+            Debug.WriteLine(new SuicaAttributesItem(data).Balance);
         }
 
         [TestMethod]
