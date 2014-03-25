@@ -97,7 +97,8 @@ namespace UnitTest.Scenarios
         {
             using (var felica = new Felica(FelicaSystemCode.Any))
             {
-                Debug.WriteLine(felica.ReadWithoutEncryption(FelicaServiceCode.EdyBalance, 0).ToEdyBalance());
+                var data = felica.ReadWithoutEncryption(FelicaServiceCode.EdyBalance, 0);
+                Debug.WriteLine(new EdyBalanceItem(data).Balance);
             }
         }
 
@@ -106,7 +107,8 @@ namespace UnitTest.Scenarios
         {
             using (var felica = new Felica(FelicaSystemCode.Edy))
             {
-                Debug.WriteLine(felica.ReadWithoutEncryption(FelicaServiceCode.EdyBalance, 0).ToEdyBalance());
+                var data = felica.ReadWithoutEncryption(FelicaServiceCode.EdyBalance, 0);
+                Debug.WriteLine(new EdyBalanceItem(data).Balance);
             }
         }
 
@@ -116,7 +118,8 @@ namespace UnitTest.Scenarios
         {
             using (var felica = new Felica(FelicaSystemCode.Edy))
             {
-                Debug.WriteLine(felica.ReadWithoutEncryption(FelicaServiceCode.EdyBalance, 1).ToEdyBalance());
+                var data = felica.ReadWithoutEncryption(FelicaServiceCode.EdyBalance, 1);
+                Debug.WriteLine(new EdyBalanceItem(data).Balance);
             }
         }
 
@@ -223,7 +226,8 @@ namespace UnitTest.Scenarios
         [TestMethod]
         public void FelicaUtility_ReadWithoutEncryption_Edy()
         {
-            Debug.WriteLine(FelicaUtility.ReadWithoutEncryption(FelicaSystemCode.Edy, FelicaServiceCode.EdyBalance, 0).ToEdyBalance());
+            var data = FelicaUtility.ReadWithoutEncryption(FelicaSystemCode.Edy, FelicaServiceCode.EdyBalance, 0);
+            Debug.WriteLine(new EdyBalanceItem(data).Balance);
         }
 
         [TestMethod]

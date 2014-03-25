@@ -106,7 +106,8 @@ namespace UnitTest.Scenarios
         {
             using (var felica = new Felica(FelicaSystemCode.Edy))
             {
-                Debug.WriteLine(felica.ReadWithoutEncryption(FelicaServiceCode.EdyBalance, 0).ToEdyBalance());
+                var data = felica.ReadWithoutEncryption(FelicaServiceCode.EdyBalance, 0);
+                Debug.WriteLine(new EdyBalanceItem(data).Balance);
             }
         }
 

@@ -21,7 +21,7 @@ namespace UnitTest45
                         try
                         {
                             var data = felica.ReadWithoutEncryption(FelicaServiceCode.EdyBalance, 0);
-                            Console.WriteLine(data.ToEdyBalance());
+                            Console.WriteLine(new EdyBalanceItem(data).Balance);
                         }
                         catch (Exception ex)
                         {
@@ -64,7 +64,7 @@ namespace UnitTest45
                 Console.WriteLine(felica.GetPMm().ToHexString());
 
                 var data = felica.ReadWithoutEncryption(FelicaServiceCode.EdyBalance, 0);
-                Console.WriteLine(data.ToEdyBalance());
+                Console.WriteLine(new EdyBalanceItem(data).Balance);
             }
         }
     }

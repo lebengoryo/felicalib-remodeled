@@ -46,14 +46,36 @@ namespace FelicaLib
         public const int SuicaHistory = 0x090F;
     }
 
-    [DebuggerDisplay(@"\{ID: {TransactionId}, {DateTime}\}")]
-    public class EdyHistoryItem
+    public abstract class FelicaBlockItem
     {
         public byte[] RawData { get; private set; }
-        public EdyHistoryItem(byte[] data)
+        protected FelicaBlockItem(byte[] data)
         {
             RawData = data;
         }
+    }
+
+    /// <summary>
+    /// Edy の残高情報を表します。
+    /// </summary>
+    [DebuggerDisplay(@"\{Balance: {Balance}\}")]
+    public class EdyBalanceItem : FelicaBlockItem
+    {
+        /// <summary>
+        /// <see cref="EdyBalanceItem"/> クラスの新しいインスタンスを初期化します。
+        /// </summary>
+        /// <param name="data">バイナリ データ。</param>
+        public EdyBalanceItem(byte[] data) : base(data) { }
+
+        /// <summary>残高を取得します。</summary>
+        /// <value>残高。</value>
+        public int Balance { get { return RawData.ToInt32(0, 4, true); } }
+    }
+
+    [DebuggerDisplay(@"\{ID: {TransactionId}, {DateTime}\}")]
+    public class EdyHistoryItem : FelicaBlockItem
+    {
+        public EdyHistoryItem(byte[] data) : base(data) { }
 
         static readonly DateTime BaseDateTime = new DateTime(2000, 1, 1);
 
@@ -73,13 +95,9 @@ namespace FelicaLib
     }
 
     [DebuggerDisplay(@"\{ID: {TransactionId}, {DateTime}\}")]
-    public class SuicaHistoryItem
+    public class SuicaHistoryItem : FelicaBlockItem
     {
-        public byte[] RawData { get; private set; }
-        public SuicaHistoryItem(byte[] data)
-        {
-            RawData = data;
-        }
+        public SuicaHistoryItem(byte[] data) : base(data) { }
 
         public DateTime DateTime
         {
@@ -111,7 +129,8 @@ namespace FelicaLib
         public static int GetEdyBalance()
         {
             var data = FelicaUtility.ReadWithoutEncryption(FelicaSystemCode.Edy, FelicaServiceCode.EdyBalance, 0);
-            return data.ToEdyBalance();
+            var item = new EdyBalanceItem(data);
+            return item.Balance;
         }
 
         /// <summary>
@@ -152,16 +171,6 @@ namespace FelicaLib
         {
             var data = FelicaUtility.ReadBlocksWithoutEncryption(FelicaSystemCode.Suica, FelicaServiceCode.SuicaHistory, 0, 20);
             return data.Select(x => new SuicaHistoryItem(x));
-        }
-
-        /// <summary>
-        /// Edy の残高情報のバイナリ データを残高に変換します。
-        /// </summary>
-        /// <param name="data">バイナリ データ。</param>
-        /// <returns>Edy の残高。</returns>
-        public static int ToEdyBalance(this byte[] data)
-        {
-            return data.ToInt32(0, 4, true);
         }
 
         /// <summary>
