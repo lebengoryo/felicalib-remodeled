@@ -213,15 +213,6 @@ namespace FelicaLib
             }
         }
 
-        /// <summary>
-        /// <see cref="Felica"/> クラスの新しいインスタンスを初期化します。
-        /// </summary>
-        /// <param name="systemCode">システム コード。</param>
-        public Felica(FelicaSystemCode systemCode)
-            : this((int)systemCode)
-        {
-        }
-
         #region IDisposable メンバー
 
         /// <summary>

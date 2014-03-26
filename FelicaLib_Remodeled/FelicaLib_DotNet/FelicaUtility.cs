@@ -35,16 +35,6 @@ namespace FelicaLib
         }
 
         /// <summary>
-        /// IC カードに接続できるかどうかを確認します。
-        /// </summary>
-        /// <param name="systemCode">システム コード。</param>
-        /// <returns>IC カードに接続できる場合は <see langword="true"/>。</returns>
-        public static bool TryConnectionToCard(FelicaSystemCode systemCode)
-        {
-            return TryConnectionToCard((int)systemCode);
-        }
-
-        /// <summary>
         /// 製造 ID (IDm) を取得します。
         /// </summary>
         /// <param name="systemCode">システム コード。</param>
@@ -58,16 +48,6 @@ namespace FelicaLib
         }
 
         /// <summary>
-        /// 製造 ID (IDm) を取得します。
-        /// </summary>
-        /// <param name="systemCode">システム コード。</param>
-        /// <returns>製造 ID (IDm)。配列の長さは 8 です。</returns>
-        public static byte[] GetIDm(FelicaSystemCode systemCode)
-        {
-            return GetIDm((int)systemCode);
-        }
-
-        /// <summary>
         /// 製造パラメータ (PMm) を取得します。
         /// </summary>
         /// <param name="systemCode">システム コード。</param>
@@ -78,16 +58,6 @@ namespace FelicaLib
             {
                 return felica.GetPMm();
             }
-        }
-
-        /// <summary>
-        /// 製造パラメータ (PMm) を取得します。
-        /// </summary>
-        /// <param name="systemCode">システム コード。</param>
-        /// <returns>製造パラメータ (PMm)。配列の長さは 8 です。</returns>
-        public static byte[] GetPMm(FelicaSystemCode systemCode)
-        {
-            return GetPMm((int)systemCode);
         }
 
         /// <summary>
@@ -106,18 +76,6 @@ namespace FelicaLib
         }
 
         /// <summary>
-        /// 非暗号化領域の 1 つのブロックのデータを読み込みます。
-        /// </summary>
-        /// <param name="systemCode">システム コード。</param>
-        /// <param name="serviceCode">サービス コード。</param>
-        /// <param name="address">アドレス。</param>
-        /// <returns>非暗号化領域のブロックのデータ。配列の長さは 16 です。</returns>
-        public static byte[] ReadWithoutEncryption(FelicaSystemCode systemCode, int serviceCode, int address)
-        {
-            return ReadWithoutEncryption((int)systemCode, serviceCode, address);
-        }
-
-        /// <summary>
         /// 非暗号化領域の連続した複数のブロックのデータを読み込みます。
         /// </summary>
         /// <param name="systemCode">システム コード。</param>
@@ -131,19 +89,6 @@ namespace FelicaLib
             {
                 return felica.ReadBlocksWithoutEncryption(serviceCode, addressStart, addressCount);
             }
-        }
-
-        /// <summary>
-        /// 非暗号化領域の連続した複数のブロックのデータを読み込みます。
-        /// </summary>
-        /// <param name="systemCode">システム コード。</param>
-        /// <param name="serviceCode">サービス コード。</param>
-        /// <param name="addressStart">読み込むブロックの最初のアドレス。</param>
-        /// <param name="addressCount">読み込むブロックの数。</param>
-        /// <returns>非暗号化領域のブロックのデータのシーケンス。</returns>
-        public static IEnumerable<byte[]> ReadBlocksWithoutEncryption(FelicaSystemCode systemCode, int serviceCode, int addressStart, int addressCount)
-        {
-            return ReadBlocksWithoutEncryption((int)systemCode, serviceCode, addressStart, addressCount);
         }
     }
 }

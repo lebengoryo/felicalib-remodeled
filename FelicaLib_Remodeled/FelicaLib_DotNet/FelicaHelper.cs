@@ -8,23 +8,23 @@ namespace FelicaLib
     /// <summary>
     /// FeliCa のシステム コードを表します。
     /// </summary>
-    public enum FelicaSystemCode
+    public static class FelicaSystemCode
     {
         /// <summary>すべて。</summary>
-        Any = 0xFFFF,
+        public const int Any = 0xFFFF;
         /// <summary>共通領域。</summary>
-        Common = 0xFE00,
+        public const int Common = 0xFE00;
         /// <summary>サイバネ領域。</summary>
-        Cybernetics = 0x0003,
+        public const int Cybernetics = 0x0003;
 
         /// <summary>Edy。共通領域を使用します。</summary>
-        Edy = Common,
+        public const int Edy = Common;
         /// <summary>WAON。共通領域を使用します。</summary>
-        Waon = Common,
+        public const int Waon = Common;
         /// <summary>Suica。サイバネ領域を使用します。</summary>
-        Suica = Cybernetics,
+        public const int Suica = Cybernetics;
         /// <summary>QUICPay。</summary>
-        QuicPay = 0x04C1,
+        public const int QuicPay = 0x04C1;
     }
 
     /// <summary>
