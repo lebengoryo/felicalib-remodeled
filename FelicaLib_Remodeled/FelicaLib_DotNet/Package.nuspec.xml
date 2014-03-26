@@ -10,7 +10,7 @@
     <projectUrl>https://github.com/sakapon/felicalib-remodeled</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Improve the API by adding utility methods, etc.</releaseNotes>
+    <releaseNotes>Add the methods to read multiple blocks serially, etc.</releaseNotes>
     <copyright>$copyright$</copyright>
     <tags>FeliCa PaSoRi</tags>
   </metadata>
