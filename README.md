@@ -39,11 +39,21 @@ foreach (var item in FelicaHelper.GetEdyHistory())
 ```
 
 一般には、システム コード、サービス コードおよびアドレスを指定して、非暗号化領域のデータを取得します。
+一部のシステム コードおよびサービス コードは、[FelicaHelper.cs](https://github.com/sakapon/felicalib-remodeled/blob/master/FelicaLib_Remodeled/FelicaLib_DotNet/FelicaHelper.cs) で定数として定義されています。
 
 ```c#
 // Edy の残高
 byte[] data = FelicaUtility.ReadWithoutEncryption(FelicaSystemCode.Edy, FelicaServiceCode.EdyBalance, 0);
 int balance = new EdyBalanceItem(data).Balance;
+```
+
+```c#
+// Suica の利用履歴
+foreach (var data in FelicaUtility.ReadBlocksWithoutEncryption(FelicaSystemCode.Suica, FelicaServiceCode.SuicaHistory, 0, 20))
+{
+    var item = new SuicaHistoryItem(data);
+    Console.WriteLine("{0:yyyy/MM/dd} 残高: {1}", item.DateTime, item.Balance);
+}
 ```
 
 ### Testing environment
