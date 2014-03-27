@@ -48,6 +48,15 @@ int balance = new EdyBalanceItem(data).Balance;
 ```
 
 ```c#
+// Edy ID
+string edyId = FelicaUtility.ReadWithoutEncryption(FelicaSystemCode.Edy, 0x110B, 0)
+    .Skip(2)
+    .Take(8)
+    .ToArray()
+    .ToHexString();
+```
+
+```c#
 // Suica の利用履歴
 foreach (var data in FelicaUtility.ReadBlocksWithoutEncryption(FelicaSystemCode.Suica, FelicaServiceCode.SuicaHistory, 0, 20))
 {
