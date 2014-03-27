@@ -34,6 +34,9 @@ namespace ConsoleAppTest45
 
                 using (var felica = new Felica(FelicaSystemCode.Edy))
                 {
+                    Console.WriteLine("FeliCa ポート: {0}", felica.TryConnectionToPort());
+                    Console.WriteLine("IC カード: {0}", felica.TryConnectionToCard());
+
                     try
                     {
                         Console.WriteLine(felica.GetIDm().ToHexString());
@@ -52,8 +55,8 @@ namespace ConsoleAppTest45
                     }
                     try
                     {
-                        var data = felica.ReadWithoutEncryption(0x1317, 0);
-                        Console.WriteLine(data.ToEdyBalance());
+                        var data = felica.ReadWithoutEncryption(FelicaServiceCode.EdyBalance, 0);
+                        Console.WriteLine(new EdyBalanceItem(data).Balance);
                     }
                     catch (Exception ex)
                     {
@@ -71,8 +74,8 @@ namespace ConsoleAppTest45
                 {
                     try
                     {
-                        var data = felica.ReadWithoutEncryption(0x1317, 0);
-                        Console.WriteLine(data.ToEdyBalance());
+                        var data = felica.ReadWithoutEncryption(FelicaServiceCode.EdyBalance, 0);
+                        Console.WriteLine(new EdyBalanceItem(data).Balance);
                     }
                     catch (Exception ex)
                     {

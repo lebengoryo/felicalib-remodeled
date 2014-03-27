@@ -53,10 +53,19 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="FelicaTest.cs" />
+    <Compile Include="..\UnitTest45\Scenarios\EdyTest.cs">
+      <Link>Scenarios\EdyTest.cs</Link>
+    </Compile>
+    <Compile Include="..\UnitTest45\Scenarios\NoCardTest.cs">
+      <Link>Scenarios\NoCardTest.cs</Link>
+    </Compile>
+    <Compile Include="..\UnitTest45\Scenarios\NoPortTest.cs">
+      <Link>Scenarios\NoPortTest.cs</Link>
+    </Compile>
+    <Compile Include="..\UnitTest45\Scenarios\SuicaTest.cs">
+      <Link>Scenarios\SuicaTest.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="FelicaUtilityTest.cs" />
-    <Compile Include="FelicaHelperTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FelicaLib_DotNet\FelicaLib_DotNet.csproj">

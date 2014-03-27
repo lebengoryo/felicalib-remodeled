@@ -10,7 +10,7 @@
     <projectUrl>https://github.com/sakapon/felicalib-remodeled</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Improve the API by adding utility methods, etc.</releaseNotes>
+    <releaseNotes>Add the methods to read multiple blocks serially, etc.</releaseNotes>
     <copyright>$copyright$</copyright>
     <tags>FeliCa PaSoRi</tags>
   </metadata>
@@ -18,5 +18,6 @@
     <file src="bin\Release\$id$.dll" target="lib\net35" />
     <file src="bin\Release\$id$.xml" target="lib\net35" />
     <file src="bin\Release\felicalib.dll" target="content" />
+    <file src="pkg\tools\*.*" target="tools" />
   </files>
 </package>

@@ -1,45 +1,14 @@
 ﻿using FelicaLib;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace UnitTest45
 {
     [TestClass]
-    public class FelicaTest
+    public class FelicaLoadTest
     {
-        [TestMethod]
-        public void GetIDm_1()
-        {
-            using (var felica = new Felica(FelicaSystemCode.Edy))
-            {
-                var target = felica.GetIDm();
-                Assert.AreEqual("0123456789ABCDEF", target.ToHexString());
-            }
-        }
-
-        [TestMethod]
-        public void GetPMm_1()
-        {
-            using (var felica = new Felica(FelicaSystemCode.Edy))
-            {
-                var target = felica.GetPMm();
-                Assert.AreEqual("0123456789ABCDEF", target.ToHexString());
-            }
-        }
-
-        [TestMethod]
-        public void ReadWithoutEncryption_1()
-        {
-            using (var felica = new Felica(FelicaSystemCode.Edy))
-            {
-                var target = felica.ReadWithoutEncryption(0x1317, 0);
-                Assert.AreEqual(12345, target.ToEdyBalance());
-            }
-        }
-
         [TestMethod]
         public void ReadWithoutEncryption_ManyTimes1()
         {
@@ -51,8 +20,8 @@ namespace UnitTest45
                     {
                         try
                         {
-                            var data = felica.ReadWithoutEncryption(0x1317, 0);
-                            Console.WriteLine(data.ToEdyBalance());
+                            var data = felica.ReadWithoutEncryption(FelicaServiceCode.EdyBalance, 0);
+                            Console.WriteLine(new EdyBalanceItem(data).Balance);
                         }
                         catch (Exception ex)
                         {
@@ -94,8 +63,8 @@ namespace UnitTest45
                 Console.WriteLine(felica.GetIDm().ToHexString());
                 Console.WriteLine(felica.GetPMm().ToHexString());
 
-                var data = felica.ReadWithoutEncryption(0x1317, 0);
-                Console.WriteLine(data.ToEdyBalance());
+                var data = felica.ReadWithoutEncryption(FelicaServiceCode.EdyBalance, 0);
+                Console.WriteLine(new EdyBalanceItem(data).Balance);
             }
         }
     }
