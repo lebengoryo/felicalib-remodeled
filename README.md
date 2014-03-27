@@ -17,23 +17,33 @@ Install-Package FelicaLib.DotNet
 ![VS-NuGet](Images/Preview/VS-NuGet.png)
 
 ### Usage
-まず、FelicaLib 名前空間を追加します。
+まず、FelicaLib 名前空間の using ディレクティブを追加します。
 
 ```c#
 using FelicaLib;
 ```
 
-Edy の残高を取得するなどの一部の特殊な用途に対しては、ヘルパー メソッドが用意されています。
+Edy の残高を取得するなどの一部の特定の用途に対しては、[FelicaHelper クラス](https://github.com/sakapon/felicalib-remodeled/blob/master/FelicaLib_Remodeled/FelicaLib_DotNet/FelicaHelper.cs)にヘルパー メソッドが用意されています。
 
 ```c#
+// Edy の残高
 int balance = FelicaHelper.GetEdyBalance();
 ```
 
-システム コード、サービス コードおよびアドレスを指定して、非暗号化領域のデータを取得します。
+```c#
+// Edy の利用履歴
+foreach (var item in FelicaHelper.GetEdyHistory())
+{
+    Console.WriteLine("{0} 利用額: {1}, 残高: {2}", item.DateTime, item.Amount, item.Balance);
+}
+```
+
+一般には、システム コード、サービス コードおよびアドレスを指定して、非暗号化領域のデータを取得します。
 
 ```c#
-byte[] data = FelicaUtility.ReadWithoutEncryption(FelicaSystemCode.Edy, 0x1317, 0);
-int balance = data.ToEdyBalance();
+// Edy の残高
+byte[] data = FelicaUtility.ReadWithoutEncryption(FelicaSystemCode.Edy, FelicaServiceCode.EdyBalance, 0);
+int balance = new EdyBalanceItem(data).Balance;
 ```
 
 ### Testing environment
