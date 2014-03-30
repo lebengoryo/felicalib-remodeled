@@ -18,6 +18,7 @@
     <file src="bin\Release\$id$.dll" target="lib\net35" />
     <file src="bin\Release\$id$.xml" target="lib\net35" />
     <file src="bin\Release\felicalib.dll" target="content" />
+    <file src="bin\Release\felicalib64.dll" target="content" />
     <file src="pkg\tools\*.*" target="tools" />
   </files>
 </package>
