@@ -43,6 +43,7 @@
     <Compile Include="FelicaHelper.cs" />
     <Compile Include="FelicaLib.cs" />
     <Compile Include="FelicaUtility.cs" />
+    <Compile Include="FelicaWatcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
