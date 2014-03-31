@@ -19,6 +19,29 @@ namespace ConsoleAppTest45
                 Console.ReadLine();
             };
 
+            using (var watcher = new FelicaWatcher(FelicaSystemCode.Edy))
+            {
+                watcher.Interval = 500;
+                watcher.CardArrived += f =>
+                {
+                    Console.WriteLine(FelicaHelper.GetEdyBalance());
+                };
+                watcher.CardDeparted += f =>
+                {
+                    Console.WriteLine("Card Departed");
+                };
+                watcher.Error += (f, ex) =>
+                {
+                    Console.WriteLine(ex.Message);
+                };
+
+                Console.WriteLine("Press [Enter] key to exit.");
+                Console.ReadLine();
+            }
+        }
+
+        static void TestAsync()
+        {
             Task.Run(() => Test1());
 
             Thread.Sleep(15000);
