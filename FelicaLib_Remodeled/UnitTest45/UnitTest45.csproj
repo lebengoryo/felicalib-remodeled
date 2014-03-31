@@ -57,6 +57,7 @@
     <Compile Include="FelicaLoadTest.cs" />
     <Compile Include="Scenarios\SuicaTest.cs" />
     <Compile Include="FelicaHelperTest.cs" />
+    <Compile Include="Scenarios\WaonTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FelicaLib_DotNet\FelicaLib_DotNet.csproj">

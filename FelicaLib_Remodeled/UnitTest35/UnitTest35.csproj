@@ -65,6 +65,9 @@
     <Compile Include="..\UnitTest45\Scenarios\SuicaTest.cs">
       <Link>Scenarios\SuicaTest.cs</Link>
     </Compile>
+    <Compile Include="..\UnitTest45\Scenarios\WaonTest.cs">
+      <Link>Scenarios\WaonTest.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -19,6 +19,11 @@ namespace ConsoleAppTest45
                 Console.ReadLine();
             };
 
+            TestWatcher();
+        }
+
+        static void TestWatcher()
+        {
             using (var watcher = new FelicaWatcher(FelicaSystemCode.Edy))
             {
                 watcher.Interval = 500;
