@@ -179,8 +179,8 @@ namespace FelicaLib
         /// <param name="data">バイナリ データ。</param>
         public SuicaHistoryItem(byte[] data) : base(data) { }
 
-        /// <summary>利用日付を取得します。</summary>
-        /// <value>利用日付。</value>
+        /// <summary>利用日時を取得します。</summary>
+        /// <value>利用日時。</value>
         public DateTime DateTime
         {
             get

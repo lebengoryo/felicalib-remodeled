@@ -5,6 +5,9 @@ using System.Threading;
 
 namespace FelicaLib
 {
+    /// <summary>
+    /// IC カードとの接続を待機します。
+    /// </summary>
     public class FelicaWatcher : IDisposable
     {
         const int DefaultInterval = 500;
@@ -36,8 +39,19 @@ namespace FelicaLib
             new Action(WatchCard).BeginInvoke(null, null);
         }
 
+        /// <summary>
+        /// IC カードが通信の範囲に入ったときに発生します。
+        /// </summary>
         public event Action<Felica> CardArrived = f => { };
+
+        /// <summary>
+        /// IC カードが通信の範囲から離れたときに発生します。
+        /// </summary>
         public event Action<Felica> CardDeparted = f => { };
+
+        /// <summary>
+        /// エラーが発生したときに発生します。
+        /// </summary>
         public event Action<Felica, Exception> Error = (f, ex) => { };
 
         void WatchCard()
@@ -87,17 +101,29 @@ namespace FelicaLib
             }
         }
 
+        #region IDisposable メンバー
+
+        /// <summary>
+        /// オブジェクトを破棄します。
+        /// </summary>
         ~FelicaWatcher()
         {
             Dispose(false);
         }
 
+        /// <summary>
+        /// このオブジェクトで使用されているすべてのリソースを解放します。
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
+        /// <summary>
+        /// このオブジェクトで使用されているリソースを解放します。
+        /// </summary>
+        /// <param name="disposing">すべてのリソースを解放する場合は <see langword="true"/>。アンマネージ リソースのみを解放する場合は <see langword="false"/>。</param>
         protected virtual void Dispose(bool disposing)
         {
             isStopped = true;
@@ -107,5 +133,7 @@ namespace FelicaLib
                 felica.Dispose();
             }
         }
+
+        #endregion
     }
 }
