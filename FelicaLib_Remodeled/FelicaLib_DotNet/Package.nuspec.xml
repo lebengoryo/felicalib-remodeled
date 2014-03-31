@@ -12,7 +12,7 @@
     <description>$description$</description>
     <releaseNotes>Add the methods to read multiple blocks serially, etc.</releaseNotes>
     <copyright>$copyright$</copyright>
-    <tags>FeliCa PaSoRi</tags>
+    <tags>FeliCa PaSoRi Edy Suica</tags>
   </metadata>
   <files>
     <file src="bin\Release\$id$.dll" target="lib\net35" />
