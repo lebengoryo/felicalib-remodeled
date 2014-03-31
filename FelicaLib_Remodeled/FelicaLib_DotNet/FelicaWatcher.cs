@@ -73,6 +73,20 @@ namespace FelicaLib
             }
         }
 
+        // Felica クラスはスレッド セーフではないため、現在は使えません。
+        static void Synchronize(Action action)
+        {
+            var context = SynchronizationContext.Current;
+            if (context != null)
+            {
+                SynchronizationContext.Current.Post(o => action(), null);
+            }
+            else
+            {
+                action.BeginInvoke(null, null);
+            }
+        }
+
         ~FelicaWatcher()
         {
             Dispose(false);
